@@ -12,7 +12,8 @@ export default class Scoreboard extends Teams {
     is_paused = false; // 是否處於暫停狀態
     // 暫停用參數
     #elapsed_time = 0; // 累計的毫秒
-    #paused_time = null; // 暫停開始時間 
+    #paused_time = null; // 暫停時間
+    #resume_time = null; // 重新開始時間
     #interval_id = null; // 計時器的 ID
 
     #config;
@@ -58,11 +59,15 @@ export default class Scoreboard extends Teams {
         if (!this.is_paused) {
             throw new Error('Timer is not paused.')
         }
-
+        // this.#resume_time = new Date(); // 記錄恢復時間
+        
+        // console.log('resume', this.#resume_time)
         this.#interval_id = setInterval(() => {
-            // this.#elapsed_time = new Date() - this.start_time; // 計算已經過的毫秒數
-            // this.timer = formatTime(this.#elapsed_time); // 更新計時器
-            // console.log(this.timer, this.#elapsed_time);
+            this.#elapsed_time = new Date() - this.start_time - this.#paused_time; // 計算已經過的毫秒數
+            console.log(this.#elapsed_time)
+            this.updateTimer()
+            console.log(this.timer, this.#elapsed_time);
+
         }, 1000); // 每秒更新一次
     }
 
@@ -71,14 +76,19 @@ export default class Scoreboard extends Teams {
         if (!this.#interval_id) {
             throw new Error('Timer is not running.')
         }
-
+        // 紀錄暫停
         this.is_paused = true; // 設置為暫停狀態
+        this.#paused_time = new Date(); // 記錄暫停時間
+
+        // 暫停計時器
         clearInterval(this.#interval_id); // 停止計時器
         this.#interval_id = null; // 清空計時器 ID
-        this.#paused_time = new Date(); // 記錄暫停時間
-        this.#elapsed_time = new Date() - this.start_time; // 記錄暫停時的累計時間
 
-        console.log(`Timer paused at: ${this.timer}`);
+        // 儲存暫停時間
+        this.#elapsed_time = new Date() - this.start_time; // 記錄暫停時的累計時間
+        this.updateTimer() // 更新計時器
+
+        console.log(this.timer, this.#elapsed_time);
     }
 
 
@@ -98,7 +108,12 @@ export default class Scoreboard extends Teams {
 
     // 重置暫停
     resetPause() {
-        this.#paused_time = null; // 重置暫停時間
+        this.#resume_time = null; // 重置暫停時間
         this.is_paused = false; // 重置暫停狀態
+    }
+
+    // 更新比賽時間
+    updateTimer() {
+        this.timer = formatTime(this.#elapsed_time); // 更新計時器
     }
 }
