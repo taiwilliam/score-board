@@ -115,7 +115,9 @@
                                 class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center"
                                 type="button"
                             >
-                                <span class="material-symbols-outlined icon-font"> priority_high </span>
+                                <span class="material-symbols-outlined icon-font">
+                                    priority_high
+                                </span>
                             </button>
                         </div>
 
@@ -163,7 +165,7 @@
                             <span class="x-point"></span>
                         </div>
                     </div>
-                    
+
                     <div class="x-board d-flex align-items-center justify-content-between">
                         <div class="x-board-content">
                             <div class="d-flex align-items-center justify-content-start pb-2">
@@ -196,7 +198,9 @@
                                 class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center"
                                 type="button"
                             >
-                                <span class="material-symbols-outlined icon-font"> priority_high </span>
+                                <span class="material-symbols-outlined icon-font">
+                                    priority_high
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -204,13 +208,30 @@
             </div>
 
             <!-- fixed bar -->
-            <div class="position-fixed bottom-0 w-100 d-flex align-items-center justify-content-center p-3">
+            <div
+                class="position-fixed bottom-0 w-100 d-flex align-items-center justify-content-center p-3"
+            >
                 <div class="col"></div>
-                <div class="col-auto">  
-                    <span class="x-title">00:00:00</span>
+                <div class="col-auto">
+                    <span class="x-title js-timer">00:00:00</span>
                 </div>
                 <div class="col text-end">
                     <span class="x-text text-secondary">G1</span>
+                </div>
+            </div>
+
+            <!-- 暫停 -->
+            <div
+                class="d-flex align-items-center justify-content-center position-fixed top-0 bottom-0 start-0 end-0 w-100 x-fullscreen js-pause-screen d-none"
+            >
+                <div class="">
+                    <strong class="display-1 text-white mb-3">暫停</strong>
+                    <button
+                        class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center mx-auto mt-3 js-start-btn"
+                        type="button"
+                    >
+                        <span class="material-symbols-outlined icon-font"> play_arrow </span>
+                    </button>
                 </div>
             </div>
         </div>

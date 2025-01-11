@@ -11,10 +11,10 @@ export default class Scoreboard extends Teams {
     stop_time = null;
     is_paused = false; // 是否處於暫停狀態
     // 暫停用參數
-    #elapsed_time = 0; // 累計的毫秒
-    #paused_time = null; // 暫停時間
-    #resume_time = null; // 重新開始時間
-    #interval_id = null; // 計時器的 ID
+    elapsed_ms = 0; // 累計的毫秒
+    elapsed_time = null; // 暫停時間
+    // #resume_time = null; // 重新開始時間
+    interval_id = null; // 計時器的 ID
 
     #config;
     #process_record;
@@ -37,83 +37,51 @@ export default class Scoreboard extends Teams {
 
     // 開始計時器
     start() {
-        if (this.#interval_id) {
+        if (this.interval_id) {
             throw new Error('Timer is already running.')
         }
+        this.elapsed_time = new Date(); // 記錄開始時間
+        this.start_time = new Date(); // 記錄比賽開始時間
+        this.is_paused = false; // 設置為開始狀態
 
-        // 如果是暫停狀態
-        if (this.is_paused) {
-            return this.#resume();
-        } 
-
-        this.start_time = new Date(); // 記錄開始時間
-        this.#interval_id = setInterval(() => {
-            this.#elapsed_time = new Date() - this.start_time; // 計算已經過的毫秒數
-            this.timer = formatTime(this.#elapsed_time); // 更新計時器
-            console.log(this.timer, this.#elapsed_time);
-        }, 1000); // 每秒更新一次
-    }
-
-    // 恢復計時器
-    #resume() {
-        if (!this.is_paused) {
-            throw new Error('Timer is not paused.')
-        }
-        // this.#resume_time = new Date(); // 記錄恢復時間
-        
-        // console.log('resume', this.#resume_time)
-        this.#interval_id = setInterval(() => {
-            this.#elapsed_time = new Date() - this.start_time - this.#paused_time; // 計算已經過的毫秒數
-            console.log(this.#elapsed_time)
-            this.updateTimer()
-            console.log(this.timer, this.#elapsed_time);
-
-        }, 1000); // 每秒更新一次
+        this.startTimer(); // 開始記時
     }
 
     // 暫停計時器
     pause() {
-        if (!this.#interval_id) {
+        if (!this.interval_id) {
             throw new Error('Timer is not running.')
         }
-        // 紀錄暫停
         this.is_paused = true; // 設置為暫停狀態
-        this.#paused_time = new Date(); // 記錄暫停時間
-
-        // 暫停計時器
-        clearInterval(this.#interval_id); // 停止計時器
-        this.#interval_id = null; // 清空計時器 ID
-
-        // 儲存暫停時間
-        this.#elapsed_time = new Date() - this.start_time; // 記錄暫停時的累計時間
         this.updateTimer() // 更新計時器
-
-        console.log(this.timer, this.#elapsed_time);
+        this.destroyInterval(); // 銷毀計時器
     }
 
 
     // 停止計時器
     stop() {
-        if (!this.#interval_id) {
-            throw new Error('Timer is not running.')
-        }
-
-        clearInterval(this.#interval_id); // 停止計時器
-        this.#interval_id = null; // 清空計時器 ID
         this.stop_time = new Date(); // 記錄停止時間
-        this.resetPause(); // 重置暫停
-
-        console.log(this.timer)
+        this.updateTimer() // 更新計時器
+        this.destroyInterval(); // 銷毀計時器
+        this.is_paused = false;
     }
 
-    // 重置暫停
-    resetPause() {
-        this.#resume_time = null; // 重置暫停時間
-        this.is_paused = false; // 重置暫停狀態
+    // 銷毀計時器
+    destroyInterval() {
+        clearInterval(this.interval_id); // 停止計時器
+        this.interval_id = null; // 清空計時器 ID
+    }
+
+    // 開始計時器
+    startTimer() {
+        this.interval_id = setInterval(() => this.updateTimer(), 1000);
     }
 
     // 更新比賽時間
     updateTimer() {
-        this.timer = formatTime(this.#elapsed_time); // 更新計時器
+        const elapsed_ms = new Date() - this.elapsed_time; // 計算已經過的毫秒數 現在時間 - 開始時間
+        this.elapsed_ms += elapsed_ms; // 累積經過的毫秒數
+        this.timer = formatTime(this.elapsed_ms); // 更新時間顯示
+        this.elapsed_time = new Date(); // 更新開始計時時間
     }
 }

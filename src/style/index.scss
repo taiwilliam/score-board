@@ -21,6 +21,11 @@ $content-height: calc(100vh - 74px - 86px);
   }
 }
 
+.x-fullscreen {
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 1;
+}
+
 .x-point {
   width: 8px;
   height: 8px;
