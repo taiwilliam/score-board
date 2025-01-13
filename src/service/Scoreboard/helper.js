@@ -5,9 +5,9 @@ export const validateConfig = config => {
             'config is object ex: {win: 1|2|3|4|5, deuce: boolean, server: 1|2, score: number, timeout_count: number, timeout_time: number, }'
         )
     }
-    // 有win 且不是 2、3、4、5
-    if ('win' in config && !([1, 2, 3, 4, 5].indexOf(config.win) > 0)) {
-        throw new Error('win is 2 to 5')
+    // 有win 且不是 1 ~ 5
+    if ('win' in config && !([1, 2, 3, 4, 5].indexOf(config.win) >= 0)) {
+        throw new Error('win is 1 to 5')
     }
     // 有score 且不是正整數
     if ('score' in config && !(typeof config.score === 'number' && config.score > 0)) {
@@ -16,7 +16,7 @@ export const validateConfig = config => {
     // 有timeout_count 且不是正整數
     if (
         'timeout_count' in config &&
-        !(typeof config.timeout_count === 'number' && config.timeout_count > 0)
+        !(typeof config.timeout_count === 'number' && config.timeout_count >= 0)
     ) {
         throw new Error('timeout_count is a positive integer')
     }
@@ -80,4 +80,20 @@ export const formatTime = ms => {
     const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0')
     const seconds = String(totalSeconds % 60).padStart(2, '0')
     return `${hours}:${minutes}:${seconds}`
+}
+
+export const validateScoreType = type => {
+    if (!(type === 'common' || type === 'foul')) {
+        throw new Error('type is common or foul')
+    }
+}
+
+export const validateProcessType = type => {
+    if (!(type === 'score' || type === 'timeout' || type === 'foul')) {
+        throw new Error('type is score, timeout or foul')
+    }
+}
+
+export const getTotalScore = score_array => {
+    return score_array.reduce((sum, value) => sum + value, 0)
 }

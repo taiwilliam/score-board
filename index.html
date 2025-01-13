@@ -4,12 +4,12 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>tain score board demo</title>
-        <link
+        <!-- <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
             crossorigin="anonymous"
-        />
+        /> -->
         <link
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100&display=swap"
             rel="stylesheet"
@@ -21,15 +21,6 @@
             href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap"
             rel="stylesheet"
         />
-
-        <style>
-            .material-symbols-outlined {
-                font-variation-settings: 'FILL' 0, 'wght' 100, 'GRAD' 0, 'opsz' 24;
-            }
-            body {
-                font-family: 'Oswald', serif;
-            }
-        </style>
     </head>
     <body>
         <div id="app" class="position-relative">
@@ -40,6 +31,9 @@
                     <button
                         class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center"
                         type="button"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#settingOffcanvas"
+                        aria-controls="settingOffcanvas"
                     >
                         <span class="material-symbols-outlined icon-font"> settings </span>
                     </button>
@@ -65,24 +59,24 @@
                     >
                         <span class="material-symbols-outlined icon-font"> undo </span>
                     </button>
-                    <button
+                    <!-- <button
                         class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center js-start-btn"
                         type="button"
                     >
                         <span class="material-symbols-outlined icon-font"> play_arrow </span>
-                    </button>
+                    </button> -->
                     <button
                         class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center js-pause-btn"
                         type="button"
                     >
                         <span class="material-symbols-outlined icon-font"> pause </span>
                     </button>
-                    <button
+                    <!-- <button
                         class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center js-stop-btn"
                         type="button"
                     >
                         <span class="material-symbols-outlined icon-font"> stop </span>
-                    </button>
+                    </button> -->
                     <button
                         class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center"
                         type="button"
@@ -100,15 +94,16 @@
                     <div class="x-board d-flex align-items-center justify-content-between">
                         <div class="start-0 x-board-side">
                             <button
-                                class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center mb-3"
+                                class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center mb-4 js-add-1-btn"
                                 type="button"
                             >
                                 <span class="material-symbols-outlined icon-font"> add </span>
                             </button>
                             <button
-                                class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center mb-3"
+                                class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center mb-4 position-relative js-timeout-btn-2"
                                 type="button"
                             >
+                                <span class="x-btn-badge js-timeout-count-2">1</span>
                                 <span class="material-symbols-outlined icon-font"> timer </span>
                             </button>
                             <button
@@ -128,7 +123,7 @@
                                     src="https://mighty.tools/mockmind-api/content/human/1.jpg"
                                     alt=""
                                 />
-                                <span class="x-text">臺庭偉</span>
+                                <span class="x-text js-team-1">臺庭偉</span>
                             </div>
                             <div
                                 class="d-flex align-items-center justify-content-center x-box active"
@@ -142,11 +137,11 @@
                             <span class="x-board-subtitle">0</span>
                         </div>
                         <div class="py-3 d-flex gap-1 justify-content-center">
-                            <span class="x-point active"></span>
-                            <span class="x-point"></span>
-                            <span class="x-point"></span>
-                            <span class="x-point"></span>
-                            <span class="x-point"></span>
+                            <span class="x-point js-point-1"></span>
+                            <span class="x-point js-point-1"></span>
+                            <span class="x-point js-point-1"></span>
+                            <span class="x-point js-point-1"></span>
+                            <span class="x-point js-point-1"></span>
                         </div>
                     </div>
                 </div>
@@ -158,11 +153,11 @@
                             <span class="x-board-subtitle">0</span>
                         </div>
                         <div class="py-3 d-flex gap-1 justify-content-center">
-                            <span class="x-point active"></span>
-                            <span class="x-point"></span>
-                            <span class="x-point"></span>
-                            <span class="x-point"></span>
-                            <span class="x-point"></span>
+                            <span class="x-point js-point-2"></span>
+                            <span class="x-point js-point-2"></span>
+                            <span class="x-point js-point-2"></span>
+                            <span class="x-point js-point-2"></span>
+                            <span class="x-point js-point-2"></span>
                         </div>
                     </div>
 
@@ -174,7 +169,7 @@
                                     src="https://mighty.tools/mockmind-api/content/human/2.jpg"
                                     alt=""
                                 />
-                                <span class="x-text">吳昀臻</span>
+                                <span class="x-text js-team-2">吳昀臻</span>
                             </div>
                             <div class="d-flex align-items-center justify-content-center x-box">
                                 <span class="x-board-title">0</span>
@@ -183,15 +178,16 @@
 
                         <div class="start-0 x-board-side">
                             <button
-                                class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center mb-3"
+                                class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center mb-4 js-add-2-btn"
                                 type="button"
                             >
                                 <span class="material-symbols-outlined icon-font"> add </span>
                             </button>
                             <button
-                                class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center mb-3"
+                                class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center mb-4 position-relative js-timeout-btn-1"
                                 type="button"
                             >
+                                <span class="x-btn-badge js-timeout-count-1">1</span>
                                 <span class="material-symbols-outlined icon-font"> timer </span>
                             </button>
                             <button
@@ -222,16 +218,256 @@
 
             <!-- 暫停 -->
             <div
-                class="d-flex align-items-center justify-content-center position-fixed top-0 bottom-0 start-0 end-0 w-100 x-fullscreen js-pause-screen d-none"
-            >
+                class="d-flex align-items-center justify-content-center position-fixed top-0 bottom-0 start-0 end-0 w-100 x-fullscreen js-pause-screen d-none">
                 <div class="">
-                    <strong class="display-1 text-white mb-3">暫停</strong>
+                    <strong class="display-1 text-white">暫停</strong>
                     <button
-                        class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center mx-auto mt-3 js-start-btn"
+                        class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center mx-auto mt-5 js-start-btn"
                         type="button"
                     >
                         <span class="material-symbols-outlined icon-font"> play_arrow </span>
                     </button>
+                </div>
+            </div>
+
+            <!-- setting offcanvas -->
+            <div
+                class="offcanvas offcanvas-bottom"
+                style="height: 75vh"
+                tabindex="-1"
+                id="settingOffcanvas"
+                aria-labelledby="settingOffcanvasLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="settingOffcanvasLabel">設定</h5>
+                    <button
+                        type="button"
+                        class="btn-close text-reset"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="offcanvas-body">
+                    <form id="settingForm" class="row g-3">
+                        <div class="col-6">
+                            <div class="input-group">
+                                <div class="input-group-text">
+                                    <input
+                                        class="form-check-input me-3"
+                                        type="radio"
+                                        name="server"
+                                        checked
+                                        value="1"
+                                    />
+                                </div>
+                                <input
+                                    type="text"
+                                    name="team_1"
+                                    class="form-control"
+                                    placeholder="選手1"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="input-group">
+                                <div class="input-group-text">
+                                    <input
+                                        class="form-check-input me-3"
+                                        type="radio"
+                                        name="server"
+                                        value="2"
+                                    />
+                                </div>
+                                <input
+                                    type="text"
+                                    name="team_2"
+                                    class="form-control"
+                                    placeholder="選手2"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="win">勝利條件</label>
+                            <select
+                                name="win"
+                                class="form-select"
+                                
+                            >
+                                <option value="1">2戰1勝</option>
+                                <option value="2">3戰2勝</option>
+                                <option value="3">5戰3勝</option>
+                                <option value="4">7戰4勝</option>
+                                <option value="5">9戰5勝</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="scoreInput" class="form-label">單局分數</label>
+                            <input
+                                type="number"
+                                name="score"
+                                min="0"
+                                min="99"
+                                value="11"
+                                class="form-control"
+                                id="scoreInput"
+                            />
+                        </div>
+                        <div class="col-12">
+                            <label for="timeout_count" class="mb-2">暫停次數</label>
+                            <select
+                                name="timeout_count"
+                                class="form-select"
+                            >
+                                <option value="0">0</option>
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="3">4</option>
+                                <option value="3">5</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="timeout_count" class="mb-2">暫停時間</label>
+                            <select
+                                name="timeout_count"
+                                class="form-select"
+                            >
+                                <option value="30">30秒</option>
+                                <option value="60" selected>60秒</option>
+                                <option value="90">90秒</option>
+                                <option value="120">120秒</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check form-switch">
+                                <label class="form-check-label" for="deuceSwitch">deuce模式</label>
+                                <input
+                                    class="form-check-input"
+                                    name="deuce"
+                                    type="checkbox"
+                                    checked
+                                    id="deuceSwitch"
+                                />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- start page -->
+            <div
+                class="position-fixed top-0 bottom-0 start-0 end-0 w-100 bg-white overflow-auto js-start-screen">
+                <div class="p-5">
+                    <h1 class="mb-5">TAIN Scoreboard</h1>
+                    <form id="startForm" class="row gy-4 align-items-end">
+                        <div class="col-6">
+                            <span class="x-fw-bold">選手姓名（發球方）</span>
+                            <div class="input-group">
+                                <div class="input-group-text me-3">
+                                    <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="server"
+                                        checked
+                                        value="1"
+                                    />
+                                </div>
+                                <input
+                                    type="text"
+                                    name="team_1"
+                                    value="william"
+                                    required
+                                    class="form-control"
+                                    placeholder="選手1"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="input-group">
+                                <div class="input-group-text me-3">
+                                    <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        name="server"
+                                        value="2"
+                                    />
+                                </div>
+                                <input
+                                    type="text"
+                                    name="team_2"
+                                    value="tony"
+                                    required
+                                    class="form-control"
+                                    placeholder="選手2"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <label for="win" class="x-fw-bold">賽制</label>
+                            <select name="win" class="form-select" >
+                                <option value="1">1戰1勝</option>
+                                <option value="2" selected>3戰2勝</option>
+                                <option value="3">5戰3勝</option>
+                                <option value="4">7戰4勝</option>
+                                <option value="5">9戰5勝</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <label for="scoreInput" class="form-label x-fw-bold">單局分數</label>
+                            <input
+                                type="number"
+                                name="score"
+                                min="0"
+                                min="99"
+                                value="11"
+                                required
+                                class="form-control"
+                                id="scoreInput"
+                            />
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <label for="timeout_count" class="x-fw-bold">暫停次數</label>
+                            <select
+                                name="timeout_count"
+                                class="form-select"
+                            >
+                                <option value="0">0</option>
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <label for="timeout_time" class="x-fw-bold">暫停時間</label>
+                            <select
+                                name="timeout_time"
+                                class="form-select"
+                            >
+                                <option value="30">30秒</option>
+                                <option value="60" selected>60秒</option>
+                                <option value="90">90秒</option>
+                                <option value="120">120秒</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <p class="mb-0 x-fw-bold">deuce模式</p>
+                            <small class="text-muted">當對賽雙方打到距離決勝分差1分時仍然平手，領先方必須取得2分差優勢才算獲勝</small>
+                            <div class="form-check form-switch mt-2">
+                                <input
+                                    class="form-check-input"
+                                    name="deuce"
+                                    type="checkbox"
+                                    value="true"
+                                    checked
+                                    id="deuceSwitch"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-12 d-grid">
+                            <button class="btn btn-primary shadow-none">開始比賽</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

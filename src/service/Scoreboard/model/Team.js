@@ -1,6 +1,6 @@
 // 隊伍
 export const Team = {
-  id: 1,
+  id: 0,
   name: '',
   photo: ''
 }
