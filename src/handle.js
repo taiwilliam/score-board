@@ -1,37 +1,55 @@
 import Scoreboard from './service/Scoreboard'
 import handlerRender from './render'
 
-const startBtnEls = document.querySelectorAll('.js-start-btn')
+const resumeBtnEl = document.querySelector('.js-resume-btn')
 const pauseBtnEl = document.querySelector('.js-pause-btn')
-const stopBtnEl = document.querySelector('.js-stop-btn')
+const resetBtnEl = document.querySelector('.js-reset-btn')
+const nextGameBtnEl = document.querySelector('.js-next-game-btn')
+const prevBtnEls = document.querySelectorAll('.js-prev-btn')
 const startForm = document.getElementById('startForm')
 const add_1_btn = document.querySelector('.js-add-1-btn')
 const add_2_btn = document.querySelector('.js-add-2-btn')
 
 let SBproxy
 
-startBtnEls.forEach(startBtnEl => {
-    startBtnEl.addEventListener('click', () => {
-        SBproxy.start()
-    })
+// 繼續按紐
+resumeBtnEl.addEventListener('click', () => {
+    SBproxy.resume()
 })
 
+// 暫停按紐
 pauseBtnEl.addEventListener('click', () => {
     SBproxy.pause()
 })
 
-// stopBtnEl.addEventListener('click', () => {
+// 重置按紐
+resetBtnEl.addEventListener('click', () => {
 //   proxy.stop();
-// })
+})
 
+// 開始下一局按紐
+nextGameBtnEl.addEventListener('click', () => {
+    SBproxy.startNextGame()
+})
+
+// 上一步按紐
+prevBtnEls.forEach(prevBtnEl => {
+    prevBtnEl.addEventListener('click', () => {
+        SBproxy.prev()
+    })
+})
+
+// 加分按紐 團隊一
 add_1_btn.addEventListener('click', () => {
     SBproxy.addScore(1)
 })
 
+// 加分按紐 團隊二
 add_2_btn.addEventListener('click', () => {
     SBproxy.addScore(2)
 })
 
+// 開始賽事表單
 startForm.addEventListener('submit', e => {
     e.preventDefault()
     const formData = new FormData(e.target)

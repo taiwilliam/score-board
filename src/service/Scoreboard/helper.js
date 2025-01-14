@@ -89,11 +89,59 @@ export const validateScoreType = type => {
 }
 
 export const validateProcessType = type => {
-    if (!(type === 'score' || type === 'timeout' || type === 'foul')) {
+    if (!(type === 'score' || type === 'timeout' || type === 'foul' || type === 'process')) {
         throw new Error('type is score, timeout or foul')
     }
 }
 
 export const getTotalScore = score_array => {
     return score_array.reduce((sum, value) => sum + value, 0)
+}
+
+export const purePush = (array, value) => {
+    return [...array, value]
+}
+
+/**
+ * 計算當前發球方
+ * @param {number} starting_server - 第一局的發球方 (1 或 2)。
+ * @param {number} score_1 - 玩家 1 的目前得分。
+ * @param {number} score_2 - 玩家 2 的目前得分。
+ * @param {number} max_score - 每局的最大得分（例如 7、11）。
+ * @returns {number} 當前的發球方 (1 或 2)。
+ */
+export const calculateCurrentServer = (starting_server, score_1, score_2, max_score) => {
+    const totalScore = score_1 + score_2;
+    const opponent_id = starting_server === 1 ? 2 : 1;
+
+    // deuce 規則（當雙方達到最大得分 - 1 時，每人輪流發 1 球）
+    if (score_1 >= max_score - 1 && score_2 >= max_score - 1) {
+        return totalScore % 2 === 0 ? starting_server : opponent_id;
+    }
+
+    // 正常發球規則，每人輪發固定次數
+    const serveChangeInterval = 2; // 一般情況下每人發 2 球
+    const currentRound = Math.floor(totalScore / serveChangeInterval);
+    return currentRound % 2 === 0 ? starting_server : opponent_id;
+}
+
+// 判斷分數是否達到局勝利條件
+export const isGameFinish = (score_1, score_2, max_score, deuce = true) => {
+    // deuce 情況下則要多贏2分
+    if(deuce) {
+        // 其中一方得分大於等於max_score分且分數差距大於等於對手2分
+        if(
+            (score_1 >= max_score && score_1 - score_2 >= 2) || 
+            (score_2 >= max_score && score_2 - score_1 >= 2)
+        ) {
+            return true
+        }
+    }else{
+        // 一般max_score分獲勝
+        if(score_1 === max_score || score_2 === max_score) {
+            return true
+        }
+    }
+
+    return false
 }
