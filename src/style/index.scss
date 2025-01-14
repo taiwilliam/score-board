@@ -125,6 +125,16 @@ body {
   font-weight: 600;
 }
 
+.x-swap {
+  flex-direction: row-reverse !important;
+  .x-content-box {
+    flex-direction: row-reverse !important;
+  }
+  .x-board {
+    flex-direction: row-reverse !important;
+  }
+}
+
 .x-btn-badge {
   background-color: $primary-color;
   font-size: .75rem;

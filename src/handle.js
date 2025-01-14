@@ -6,6 +6,7 @@ const pauseBtnEl = document.querySelector('.js-pause-btn')
 const resetBtnEl = document.querySelector('.js-reset-btn')
 const nextGameBtnEl = document.querySelector('.js-next-game-btn')
 const prevBtnEls = document.querySelectorAll('.js-prev-btn')
+const swapBtnEl = document.querySelector('.js-swap-btn')
 const startForm = document.getElementById('startForm')
 const add_1_btn = document.querySelector('.js-add-1-btn')
 const add_2_btn = document.querySelector('.js-add-2-btn')
@@ -37,6 +38,12 @@ prevBtnEls.forEach(prevBtnEl => {
     prevBtnEl.addEventListener('click', () => {
         SBproxy.prev()
     })
+})
+
+// 交換按紐
+swapBtnEl.addEventListener('click', () => {
+    const content = document.querySelector('.js-content')
+    content.classList.toggle('x-swap')
 })
 
 // 加分按紐 團隊一
