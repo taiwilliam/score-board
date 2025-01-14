@@ -1,5 +1,6 @@
 import Scoreboard from './service/Scoreboard'
 import handlerRender from './render'
+import { preventScreenSleep } from './service/Scoreboard/helper'
 
 const resumeBtnEl = document.querySelector('.js-resume-btn')
 const pauseBtnEl = document.querySelector('.js-pause-btn')
@@ -12,6 +13,7 @@ const add_1_btn = document.querySelector('.js-add-1-btn')
 const add_2_btn = document.querySelector('.js-add-2-btn')
 
 let SBproxy
+let wakeLock
 
 // 繼續按紐
 resumeBtnEl.addEventListener('click', () => {
@@ -65,7 +67,7 @@ startForm.addEventListener('submit', e => {
 })
 
 // 提交開始賽事表單
-const submitStartForm = formData => {
+const submitStartForm = async formData => {
     const formObject = Object.fromEntries(formData.entries())
     // 建立記分板
     const SB = new Scoreboard({
@@ -87,7 +89,9 @@ const submitStartForm = formData => {
         photo: 'https://mighty.tools/mockmind-api/content/human/2.jpg'
     })
 
-    console.log('SB', SB)
+    // 代理記分板 用於監聽畫面渲染
     SBproxy = new Proxy(SB, handlerRender)
     SBproxy.start()
+    // 防止螢幕休眠
+    wakeLock = await preventScreenSleep()
 }

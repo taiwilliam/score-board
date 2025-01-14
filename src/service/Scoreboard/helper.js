@@ -145,3 +145,44 @@ export const isGameFinish = (score_1, score_2, max_score, deuce = true) => {
 
     return false
 }
+
+export const isMatchFinish = (score_1, score_2, max_score) => {
+    if(score_1 === max_score || score_2 === max_score) {
+        return true
+    }
+    return false
+}
+
+/**
+ * 防止螢幕熄滅的函數
+ */
+export const preventScreenSleep = async () => {
+    let wakeLock = null;
+  
+    try {
+      // 嘗試獲取螢幕喚醒鎖
+      wakeLock = await navigator.wakeLock.request('screen');
+      
+      // 處理喚醒鎖意外釋放（例如設備睡眠或切換標籤頁）
+      wakeLock.addEventListener('release', () => {
+        console.log('螢幕喚醒鎖已釋放');
+      });
+    } catch (err) {
+      console.error('無法啟用螢幕喚醒鎖:', err);
+    }
+  
+    // 返回喚醒鎖對象，方便日後釋放
+    return wakeLock;
+  }
+  
+  /**
+   * 釋放螢幕喚醒鎖的函數
+   * @param {WakeLockSentinel} wakeLock - 喚醒鎖對象
+   */
+  function releaseScreenSleep(wakeLock) {
+    if (wakeLock) {
+      wakeLock.release().then(() => {
+        console.log('螢幕喚醒鎖已手動釋放');
+      });
+    }
+  }

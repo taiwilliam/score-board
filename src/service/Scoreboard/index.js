@@ -11,7 +11,8 @@ import {
     getTotalScore,
     purePush,
     calculateCurrentServer,
-    isGameFinish
+    isGameFinish,
+    isMatchFinish
 } from './helper'
 
 // 記分板管理器
@@ -22,6 +23,7 @@ export default class Scoreboard extends Teams {
     start_time = null // 賽事開始時間
     stop_time = null // 賽事結束時間
     is_paused = false // 是否處於暫停狀態
+    is_pre_finish = false // 是否處於比賽結束前狀態
     is_game_interval = false // 是否處於比賽局間間隔
     // 暫停用參數
     elapsed_ms = 0 // 累計的毫秒
@@ -114,7 +116,7 @@ export default class Scoreboard extends Teams {
         // 復原時間
         this.resumeTimer()
 
-        if(this.process_record.length === 0) {
+        if (this.process_record.length === 0) {
             return
         }
 
@@ -131,7 +133,7 @@ export default class Scoreboard extends Teams {
         this.updateServer()
 
         // 如果在局間隔則恢復計時器
-        if(this.is_game_interval) {
+        if (this.is_game_interval || this.is_pre_finish) {
             this.clearPause()
         }
     }
@@ -140,6 +142,7 @@ export default class Scoreboard extends Teams {
     clearPause() {
         this.is_paused = false
         this.is_game_interval = false
+        this.is_pre_finish = false
         this.startTimer()
     }
 
@@ -147,7 +150,7 @@ export default class Scoreboard extends Teams {
     startNextGame() {
         // 下一局
         this.nextGame()
-        
+
         // 更新局數
         this.updateMatchRecord()
 
@@ -189,14 +192,26 @@ export default class Scoreboard extends Teams {
     // 刪除得分紀錄 預設刪除最後一筆
     deleteScoreRecord(score_record_id = this.getLatestRecord('score').id) {
         let new_score_record = [...this.score_record]
-        new_score_record = new_score_record.filter(record => record.id !== score_record_id)
+        new_score_record = new_score_record.filter(record => {
+            // 不得跨局刪除
+            if (record.game !== this.current_game) {
+                return true
+            }
+            return record.id !== score_record_id
+        })
         this.score_record = new_score_record
     }
 
     // 刪除進程紀錄 預設刪除最後一筆
     deleteProcessRecord(process_record_id = this.getLatestRecord('process').id) {
         let new_process_record = [...this.process_record]
-        new_process_record = new_process_record.filter(record => record.id !== process_record_id)
+        new_process_record = new_process_record.filter(record => {
+            // 不得跨局刪除
+            if (record.game !== this.current_game) {
+                return true
+            }
+            return record.id !== process_record_id
+        })
         this.process_record = new_process_record
     }
 
@@ -245,10 +260,16 @@ export default class Scoreboard extends Teams {
         this.elapsed_time = new Date() // 更新開始計時時間
     }
 
-    // 更新局數
+    // 處理局數結束
     handleGameFinish() {
         // 單局未結束則跳過
-        if(!this.isGameFinish()) {
+        if (!this.isGameFinish()) {
+            return
+        }
+
+        // 若為最後一局
+        if (this.isMatchFinish()) {
+            this.handleMatchFinish()
             return
         }
 
@@ -258,10 +279,26 @@ export default class Scoreboard extends Teams {
         this.pause()
     }
 
+    // 處理賽事結束
+    handleMatchFinish() {
+        // 設置為比賽結束前狀態
+        this.is_pre_finish = true
+
+        // 暫停計時器
+        this.pause()
+    }
+
     // 單局是否已結束
     isGameFinish() {
         const { team_1, team_2 } = this.getGameTotalScore()
         return isGameFinish(team_1, team_2, this.config.score, this.config.deuce)
+    }
+
+    // 賽事是否已結束
+    isMatchFinish() {
+        const { team_1, team_2 } = this.getMatchTotalScore()
+        // 有任一隊伍達到勝利局數 代表完賽
+        return isMatchFinish(team_1, team_2, this.config.win)
     }
 
     // 推進局數
@@ -287,13 +324,13 @@ export default class Scoreboard extends Teams {
     }
 
     // 獲得單局紀錄
-    getGameRecord() {
-        return this.game_record.find(record => record.game === this.current_game)
+    getGameRecord(game = this.current_game) {
+        return this.game_record.find(record => record.game === game)
     }
 
     // 獲得單局總分
-    getGameTotalScore() {
-        const game_record = this.getGameRecord()
+    getGameTotalScore(game = this.current_game) {
+        const game_record = this.getGameRecord(game)
         const team_1_score = game_record?.team_1 ? game_record.team_1 : []
         const team_2_score = game_record?.team_2 ? game_record.team_2 : []
         const team_1_total_score = getTotalScore(team_1_score)
@@ -302,6 +339,24 @@ export default class Scoreboard extends Teams {
             team_1: team_1_total_score,
             team_2: team_2_total_score
         }
+    }
+
+    // 獲得場總分
+    getMatchTotalScore() {
+        const match_score = {
+            team_1: 0,
+            team_2: 0
+        }
+        this.game_record.forEach(record => {
+            const { team_1, team_2 } = this.getGameTotalScore(record.game)
+            const is_game_finish = isGameFinish(team_1, team_2, this.config.score, this.config.deuce)
+            if (is_game_finish) {
+                const winner_team = team_1 > team_2 ? 'team_1' : 'team_2'
+                match_score[winner_team] += 1
+            }
+        })
+
+        return match_score
     }
 
     // 創建進程記錄
@@ -404,7 +459,7 @@ export default class Scoreboard extends Teams {
 
         return end_time
     }
-    
+
 
     // 獲得單局分
     getGameScore(team_id) {
@@ -412,7 +467,7 @@ export default class Scoreboard extends Teams {
         const game_score = []
         this.score_record.forEach(score_record => {
             // 若不是該局
-            if(score_record.game !== this.current_game) {
+            if (score_record.game !== this.current_game) {
                 return
             }
             const score = score_record.winner === team_id ? 1 : 0
@@ -434,7 +489,7 @@ export default class Scoreboard extends Teams {
             const total_score = getTotalScore(record[team_key])
             const opponent_total_score = getTotalScore(record[opponent_key])
 
-            if(isGameFinish(total_score, opponent_total_score, this.config.score, this.config.deuce)) {
+            if (isGameFinish(total_score, opponent_total_score, this.config.score, this.config.deuce)) {
                 match_score.push(total_score > opponent_total_score ? 1 : 0)
             }
         })

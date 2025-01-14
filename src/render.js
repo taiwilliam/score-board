@@ -9,7 +9,18 @@ const handlerRender = {
 
         // 渲染暫停模式
         if (property === 'is_paused') {
-            renderPauseStyle(value)
+            const is_paused = value && !target.is_game_interval && !target.is_pre_finish
+            renderPauseStyle(is_paused)
+        }
+
+        // 渲染局間暫停
+        if (property === 'is_game_interval') {
+            renderGameInterval(value, target.current_game)
+        }
+
+        // 渲染結束前畫面
+        if (property === 'is_pre_finish') {
+            renderPreFinish(value)
         }
 
         // 渲染開始畫面
@@ -36,11 +47,6 @@ const handlerRender = {
         // 渲染大分
         if (property === 'match_record') {
             renderMachScore(value)
-        }
-
-        // 渲染局間暫停
-        if (property === 'is_game_interval') {
-            renderGameInterval(value)
         }
 
         target[property] = value
@@ -129,16 +135,26 @@ const renderServer = value => {
 }
 
 // 渲染局間暫停
-const renderGameInterval = value => {
-    const game_content = document.querySelector('.js-game-interval-content')
-    const pause_content = document.querySelector('.js-pause-content')
+const renderGameInterval = (is_game_interval, game) => {
+    const game_screen = document.querySelector('.js-game-interval-screen')
+    const game_interval_text = document.querySelector('.js-game-interval-text')
 
-    if (value) {
-        game_content.classList.remove('d-none')
-        pause_content.classList.add('d-none')
+    game_interval_text.textContent = `第${ game }局結束`
+    if (is_game_interval) {
+        game_screen.classList.remove('d-none')
     } else {
-        game_content.classList.add('d-none')
-        pause_content.classList.remove('d-none')
+        game_screen.classList.add('d-none')
+    }
+}
+
+// 渲染完成前畫面
+const renderPreFinish = is_pre_finish => {
+    const finish_screen = document.querySelector('.js-pre-finish-screen')
+
+    if (is_pre_finish) {
+        finish_screen.classList.remove('d-none')
+    } else {
+        finish_screen.classList.add('d-none')
     }
 }
 

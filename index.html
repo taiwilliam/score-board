@@ -159,7 +159,9 @@
                                 />
                                 <span class="x-text js-team-2">吳昀臻</span>
                             </div>
-                            <div class="d-flex align-items-center justify-content-center x-box js-score-box-2">
+                            <div
+                                class="d-flex align-items-center justify-content-center x-box js-score-box-2"
+                            >
                                 <span class="x-board-title js-score-2">0</span>
                             </div>
                         </div>
@@ -204,10 +206,11 @@
                 </div>
             </div>
 
-            <!-- 暫停 -->
+            <!-- 暫停 fullscreen -->
             <div
-                class="d-flex align-items-center justify-content-center position-fixed top-0 bottom-0 start-0 end-0 w-100 x-fullscreen js-pause-screen d-none">
-                <div class="js-pause-content">
+                class="d-flex align-items-center justify-content-center position-fixed top-0 bottom-0 start-0 end-0 w-100 x-fullscreen js-pause-screen d-none"
+            >
+                <div class="">
                     <strong class="display-1 text-white">暫停</strong>
                     <button
                         class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center mx-auto mt-5 js-resume-btn"
@@ -216,8 +219,13 @@
                         <span class="material-symbols-outlined icon-font"> play_arrow </span>
                     </button>
                 </div>
-                <div class="js-game-interval-content d-none">
-                    <strong class="display-1 text-white">第一局結束</strong>
+            </div>
+
+            <!-- 局間暫停 fullscreen -->
+            <div
+                class="d-flex align-items-center justify-content-center position-fixed top-0 bottom-0 start-0 end-0 w-100 x-fullscreen js-game-interval-screen d-none">
+                <div class="">
+                    <strong class="display-1 text-white js-game-interval-text">第一局結束</strong>
                     <div class="row mx-auto mt-5">
                         <div class="col-6 d-grid">
                             <button
@@ -241,13 +249,42 @@
                 </div>
             </div>
 
+            <!-- 賽事結束前 fullscreen -->
+            <div
+                class="d-flex align-items-center justify-content-center position-fixed top-0 bottom-0 start-0 end-0 w-100 x-fullscreen js-pre-finish-screen d-none">
+                <div class="">
+                    <strong class="display-1 text-white">完成賽事</strong>
+                    <div class="row mx-auto mt-5">
+                        <div class="col-6 d-grid">
+                            <button
+                                class="btn btn-light d-flex align-items-center justify-content-between js-prev-btn"
+                                type="button"
+                            >
+                                <span class="material-symbols-outlined icon-font"> undo </span>
+                                <span class="mx-auto text-nowrap">上一步</span>
+                            </button>
+                        </div>
+                        <div class="col-6 d-grid">
+                            <button
+                                class="btn btn-light d-flex align-items-center justify-content-between js-next-game-btn"
+                                type="button"
+                            >
+                                <span class="material-symbols-outlined icon-font"> crown </span>
+                                <span class="mx-auto text-nowrap">完成</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- setting offcanvas -->
             <div
                 class="offcanvas offcanvas-bottom"
                 style="height: 75vh"
                 tabindex="-1"
                 id="settingOffcanvas"
-                aria-labelledby="settingOffcanvasLabel">
+                aria-labelledby="settingOffcanvasLabel"
+            >
                 <div class="offcanvas-header">
                     <h5 class="offcanvas-title" id="settingOffcanvasLabel">設定</h5>
                     <button
@@ -257,14 +294,13 @@
                         aria-label="Close"
                     ></button>
                 </div>
-                <div class="offcanvas-body">
-                    123
-                </div>
+                <div class="offcanvas-body">123</div>
             </div>
 
             <!-- start page -->
             <div
-                class="position-fixed top-0 bottom-0 start-0 end-0 w-100 bg-white overflow-auto js-start-screen">
+                class="position-fixed top-0 bottom-0 start-0 end-0 w-100 bg-white overflow-auto js-start-screen"
+            >
                 <div class="p-5">
                     <h1 class="mb-5">TAIN Scoreboard</h1>
                     <form id="startForm" class="row gy-4 align-items-end">
@@ -312,7 +348,7 @@
                         </div>
                         <div class="col-12 col-sm-6">
                             <label for="win" class="x-fw-bold">賽制</label>
-                            <select name="win" class="form-select" >
+                            <select name="win" class="form-select">
                                 <option value="1">1戰1勝</option>
                                 <option value="2" selected>3戰2勝</option>
                                 <option value="3">5戰3勝</option>
@@ -335,10 +371,7 @@
                         </div>
                         <div class="col-12 col-sm-6">
                             <label for="timeout_count" class="x-fw-bold">暫停次數</label>
-                            <select
-                                name="timeout_count"
-                                class="form-select"
-                            >
+                            <select name="timeout_count" class="form-select">
                                 <option value="0">0</option>
                                 <option value="1" selected>1</option>
                                 <option value="2">2</option>
@@ -349,10 +382,7 @@
                         </div>
                         <div class="col-12 col-sm-6">
                             <label for="timeout_time" class="x-fw-bold">暫停時間</label>
-                            <select
-                                name="timeout_time"
-                                class="form-select"
-                            >
+                            <select name="timeout_time" class="form-select">
                                 <option value="30">30秒</option>
                                 <option value="60" selected>60秒</option>
                                 <option value="90">90秒</option>
@@ -361,7 +391,9 @@
                         </div>
                         <div class="col-12">
                             <p class="mb-0 x-fw-bold">deuce模式</p>
-                            <small class="text-muted">當對賽雙方打到距離決勝分差1分時仍然平手，領先方必須取得2分差優勢才算獲勝</small>
+                            <small class="text-muted"
+                                >當對賽雙方打到距離決勝分差1分時仍然平手，領先方必須取得2分差優勢才算獲勝</small
+                            >
                             <div class="form-check form-switch mt-2">
                                 <input
                                     class="form-check-input"
