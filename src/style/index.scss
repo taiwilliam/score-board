@@ -29,6 +29,8 @@ body {
     background-color: $secondary-color;
     border: $dark-color 1px solid;
     padding: 5px !important;
+    width: 44px;
+    height: 44px;
     &:hover {
         background-color: #d9d9d9;
     }
@@ -44,6 +46,9 @@ body {
 
 .x-z-1 {
     z-index: 1;
+}
+.offcanvas {
+    z-index: 9999;
 }
 
 .x-point {
