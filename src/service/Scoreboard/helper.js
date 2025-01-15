@@ -191,7 +191,7 @@ export const releaseScreenSleep = wakeLock => {
  * @param {team_1} - [1,0,0,1,1...]
  * @param {team_2} - [0,1,1,0,0...]
  */
-export const calculateMaxLeadAdvantage = (team_1, team_2) => {
+export const calculateMaxLeadScore = (team_1, team_2) => {
     let lead_1 = 0
     let lead_2 = 0
     let max_lead_team_1 = 0
@@ -241,6 +241,11 @@ export const findMaxByKey = (data, key) => {
     return data.reduce((max, current) => Math.max(max, current[key]), -Infinity)
 }
 
+// 將陣列中的物件按照某個屬性加總
+export const sumByKey = (data, key) => {
+    return data.reduce((sum, current) => sum + +current[key], 0)
+}
+
 // 計算最大落後追回分
 export const calculateMaxRecoveredDeficit = (team_1, team_2) => {
     let maxDeficitRecoveredTeam1 = 0 // Team 1 最大落後追回分
@@ -284,5 +289,6 @@ export const calculateMaxRecoveredDeficit = (team_1, team_2) => {
 // 轉換成百分比
 // 比率、小數點位數
 export const toPercentage = (ratio, decimal = 2) => {
-    return (ratio * 100).toFixed(decimal);
+    const factor = Math.pow(10, decimal);
+    return Math.round(ratio * 100 * factor) / factor;
 }

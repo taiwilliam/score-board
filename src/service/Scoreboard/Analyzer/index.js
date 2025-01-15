@@ -9,8 +9,9 @@ import {
 } from './fakeData'
 import {
     mergeObjects,
-    calculateMaxLeadAdvantage,
+    calculateMaxLeadScore,
     findMaxByKey,
+    sumByKey,
     calculateMaxStreak,
     calculateMaxRecoveredDeficit,
     toPercentage
@@ -51,36 +52,46 @@ export default class Analyzer {
     calculateAll() {
         // 每局數據
         // 得分
-        this.game_data.total_score = this.calcTotalScore()
-        this.game_data.serve_points = this.calcServeScore()
-        this.game_data.receive_points = this.calcReceiveScore()
-        this.game_data.max_lead_advantage = this.calcMaxLeadAdvantage()
-        this.game_data.max_winning_streak = this.calcMaxStreak(1)
-        this.game_data.max_losing_streak = this.calcMaxStreak(0)
-        this.game_data.max_recovered_deficit = this.calcMaxRecoveredDeficit()
+        this.game_data.total_score = this.calcGameTotalScore()
+        this.game_data.serve_score = this.calcGameServeScore()
+        this.game_data.receive_score = this.calcGameReceiveScore()
+        this.game_data.max_lead_score = this.calcGameMaxLeadScore()
+        this.game_data.max_winning_streak = this.calcGameMaxStreak(1)
+        this.game_data.max_losing_streak = this.calcGameMaxStreak(0)
+        this.game_data.max_recovered_deficit = this.calcGameMaxRecoveredDeficit()
         // 比率
-        this.game_data.scoring_rate = this.calcScoringRate()
-        this.game_data.serve_scoring_rate = this.calcServeScoringRate()
-        this.game_data.receive_scoring_rate = this.calcReceiveScoringRate()
-        // this.data.post_timeout_scoring_rate = this.calcPostTimeoutScoringRate()
+        this.game_data.scoring_rate = this.calcGameScoringRate()
+        this.game_data.serve_scoring_rate = this.calcGameServeScoringRate()
+        this.game_data.receive_scoring_rate = this.calcGameReceiveScoringRate()
+        // this.data.post_timeout_scoring_rate = this.calcGamePostTimeoutScoringRate()
         // 時間
         this.game_data.game_time = this.calcGameTime()
-        this.game_data.average_scoring_point = this.calcAverageScoringTime()
-        this.game_data.average_winning_time = this.calcAverageWinningTime()
-        this.game_data.average_losing_time = this.calcAverageLosingTime()
-        this.game_data.max_point_duration = this.calcMaxPointDuration()
-        this.game_data.min_point_duration = this.calcMinPointDuration()
+        this.game_data.average_scoring_time = this.calcGameAverageScoringTime()
+        this.game_data.average_winning_time = this.calcGameAverageWinningTime()
+        this.game_data.average_losing_time = this.calcGameAverageLosingTime()
+        this.game_data.max_score_time = this.calcGameMaxScoreTime()
+        this.game_data.min_score_time = this.calcGameMinScoreTime()
 
         // 總數據
         // 得分
-        // this.data.average_game_time = this.calcAverageGameTime()
-        // this.data.max_game_time = this.calcMaxGameTime()
-        // this.data.min_game_time = this.calcMinGameTime()
-        // this.data.average_winning_game_time = this.calcAverageWinningGameTime()
-        // this.data.average_losing_game_time = this.calcAverageLosingGameTime()
-        // this.data.match_duration = this.calcMatchDuration()
-        // this.data.match_start_time = this.calcMatchStartTime()
-        // this.data.match_end_time = this.calcMatchEndTime()
+        this.data.total_score = this.calcTotalScore()
+        this.data.serve_score = this.calcServeScore()
+        this.data.receive_score = this.calcReceiveScore()
+        this.data.max_lead_score = this.calcMaxLeadScore()
+        this.data.max_winning_streak = this.calcMaxWinningStreak()
+        this.data.max_losing_streak = this.calcMaxLosingStreak()
+        this.data.max_recovered_deficit = this.calcMaxRecoveredDeficit()
+        // 比率
+        this.data.scoring_rate = this.calcScoringRate()
+        this.data.serve_scoring_rate = this.calcServeScoringRate()
+        this.data.receive_scoring_rate = this.calcReceiveScoringRate()
+        // this.data.post_timeout_scoring_rate = this.calcPostTimeoutScoringRate()
+        // 時間
+        this.data.average_scoring_time = this.calcAverageScoringTime()
+        this.data.average_winning_time = this.calcAverageWinningTime()
+        this.data.average_losing_time = this.calcAverageLosingTime()
+        this.data.max_score_time = this.calcMaxScoreTime()
+        this.data.min_score_time = this.calcMinScoreTime()
     }
     // 初始化總分
     #initTotalPoint() {
@@ -168,7 +179,7 @@ export default class Analyzer {
         return result
     }
     // 計算總分
-    calcTotalScore() {
+    calcGameTotalScore() {
         return this.game_total_data.map(game => ({
             game: game.game,
             team_1: game.team_1.score_win,
@@ -176,7 +187,7 @@ export default class Analyzer {
         }))
     }
     // 計算發球得分
-    calcServeScore() {
+    calcGameServeScore() {
         return this.game_total_data.map(game => ({
             game: game.game,
             team_1: game.team_1.serve_win,
@@ -184,7 +195,7 @@ export default class Analyzer {
         }))
     }
     // 計算接發球得分
-    calcReceiveScore() {
+    calcGameReceiveScore() {
         return this.game_total_data.map(game => ({
             game: game.game,
             team_1: game.team_1.receive_win,
@@ -192,17 +203,17 @@ export default class Analyzer {
         }))
     }
     // 計算最大領先優勢
-    calcMaxLeadAdvantage() {
-        const max_lead_advantage = []
+    calcGameMaxLeadScore() {
+        const max_lead_score = []
         this.game_record.forEach(game => {
             const { team_1, team_2 } = game
-            max_lead_advantage.push(calculateMaxLeadAdvantage(team_1, team_2))
+            max_lead_score.push(calculateMaxLeadScore(team_1, team_2))
         })
 
-        return max_lead_advantage
+        return max_lead_score
     }
     // 計算最大連勝分
-    calcMaxStreak(type = 1) {
+    calcGameMaxStreak(type = 1) {
         const max_winning_streak = []
 
         this.game_record.forEach(game => {
@@ -216,7 +227,7 @@ export default class Analyzer {
         return max_winning_streak
     }
     // 計算最大落後追回分
-    calcMaxRecoveredDeficit() {
+    calcGameMaxRecoveredDeficit() {
         const max_recovered_deficit = []
         this.game_record.forEach(game => {
             const { team_1, team_2 } = calculateMaxRecoveredDeficit(game.team_1, game.team_2)
@@ -229,7 +240,7 @@ export default class Analyzer {
         return max_recovered_deficit
     }
     // 計算得分率
-    calcScoringRate() {
+    calcGameScoringRate() {
         return this.game_total_data.map(game => ({
             game: game.game,
             team_1: toPercentage(game.team_1.score_win / game.team_1.score),
@@ -237,7 +248,7 @@ export default class Analyzer {
         }))
     }
     // 計算發球得分率
-    calcServeScoringRate() {
+    calcGameServeScoringRate() {
         return this.game_total_data.map(game => ({
             game: game.game,
             team_1: toPercentage(game.team_1.serve_win / game.team_1.serve),
@@ -245,7 +256,7 @@ export default class Analyzer {
         }))
     }
     // 計算接發球得分率
-    calcReceiveScoringRate() {
+    calcGameReceiveScoringRate() {
         return this.game_total_data.map(game => ({
             game: game.game,
             team_1: toPercentage(game.team_1.receive_win / game.team_1.receive),
@@ -261,7 +272,7 @@ export default class Analyzer {
         }))
     }
     // 計算每分平均時間
-    calcAverageScoringTime() {
+    calcGameAverageScoringTime() {
         return this.game_total_data.map(game => ({
             game: game.game,
             team_1: game.team_1.game_time / game.team_1.score,
@@ -269,7 +280,7 @@ export default class Analyzer {
         }))
     }
     // 計算得分平均時間
-    calcAverageWinningTime() {
+    calcGameAverageWinningTime() {
         return this.game_time_data.map(game => {
             const team_1_win_time = this.#calcTotalTime(game.team_1, true)
             const team_2_win_time = this.#calcTotalTime(game.team_2, true)
@@ -282,7 +293,7 @@ export default class Analyzer {
         })
     }
     // 計算失分平均時間
-    calcAverageLosingTime() {
+    calcGameAverageLosingTime() {
         return this.game_time_data.map(game => {
             const team_1_lose_time = this.#calcTotalTime(game.team_1, false)
             const team_2_lose_time = this.#calcTotalTime(game.team_2, false)
@@ -308,7 +319,7 @@ export default class Analyzer {
         }, 0)
     }
     // 計算最大分時間
-    calcMaxPointDuration() {
+    calcGameMaxScoreTime() {
       return this.game_time_data.map(game => {
         const score_time = game.team_1.reduce((max, current) => {
             return current.time > max.time ? current : max
@@ -320,7 +331,7 @@ export default class Analyzer {
       })
     }
     // 計算最小分時間
-    calcMinPointDuration() {
+    calcGameMinScoreTime() {
       return this.game_time_data.map(game => {
         const score_time = game.team_1.reduce((min, current) => {
             return current.time < min.time ? current : min
@@ -330,5 +341,125 @@ export default class Analyzer {
           team_2: score_time.time
         }
       })
+    }
+    // 計算總分
+    calcTotalScore() {
+        this.game_data.total_score.length === 0 && this.calcGameTotalScore()
+        return {
+            team_1: sumByKey(this.game_data.total_score, 'team_1'),
+            team_2: sumByKey(this.game_data.total_score, 'team_2')
+        }
+    }
+    // 計算發球得分
+    calcServeScore() {
+        this.game_data.serve_score.length === 0 && this.calcGameServeScore()
+        return {
+            team_1: sumByKey(this.game_data.serve_score, 'team_1'),
+            team_2: sumByKey(this.game_data.serve_score, 'team_2')
+        }
+    }
+    // 計算接發球得分
+    calcReceiveScore() {
+        this.game_data.receive_score.length === 0 && this.calcGameReceiveScore()
+        return {
+            team_1: sumByKey(this.game_data.receive_score, 'team_1'),
+            team_2: sumByKey(this.game_data.receive_score, 'team_2')
+        }
+    }
+    // 計算最大領先優勢
+    calcMaxLeadScore() {
+        this.game_data.max_lead_score.length === 0 && this.calcGameMaxLeadScore()
+        return {
+            team_1: findMaxByKey(this.game_data.max_lead_score, 'team_1'),
+            team_2: findMaxByKey(this.game_data.max_lead_score, 'team_2')
+        }
+    }
+    // 計算最大連勝分
+    calcMaxWinningStreak() {
+        this.game_data.max_winning_streak.length === 0 && this.calcGameMaxStreak(1)
+        return {
+            team_1: findMaxByKey(this.game_data.max_winning_streak, 'team_1'),
+            team_2: findMaxByKey(this.game_data.max_winning_streak, 'team_2')
+        }
+    }
+    // 計算最大連敗分
+    calcMaxLosingStreak() {
+        this.game_data.max_losing_streak.length === 0 && this.calcGameMaxStreak(0)
+        return {
+            team_1: findMaxByKey(this.game_data.max_losing_streak, 'team_1'),
+            team_2: findMaxByKey(this.game_data.max_losing_streak, 'team_2')
+        }
+    }
+    // 計算最大落後追回分
+    calcMaxRecoveredDeficit() {
+        this.game_data.max_recovered_deficit.length === 0 && this.calcGameMaxRecoveredDeficit()
+        return {
+            team_1: findMaxByKey(this.game_data.max_recovered_deficit, 'team_1'),
+            team_2: findMaxByKey(this.game_data.max_recovered_deficit, 'team_2')
+        }
+    }
+    // 計算得分率
+    calcScoringRate() {
+        this.game_data.scoring_rate.length === 0 && this.calcGameScoringRate()
+        return {
+            team_1: sumByKey(this.game_data.scoring_rate, 'team_1') / this.game_data.scoring_rate.length,
+            team_2: sumByKey(this.game_data.scoring_rate, 'team_2') / this.game_data.scoring_rate.length
+        }
+    }
+    // 計算發球得分率
+    calcServeScoringRate() {
+        this.game_data.serve_scoring_rate.length === 0 && this.calcGameServeScoringRate()
+        return {
+            team_1: sumByKey(this.game_data.serve_scoring_rate, 'team_1') / this.game_data.serve_scoring_rate.length,
+            team_2: sumByKey(this.game_data.serve_scoring_rate, 'team_2') / this.game_data.serve_scoring_rate.length
+        }
+    }
+    // 計算接發球得分率
+    calcReceiveScoringRate() {
+        this.game_data.receive_scoring_rate.length === 0 && this.calcGameReceiveScoringRate()
+        return {
+            team_1: sumByKey(this.game_data.receive_scoring_rate, 'team_1') / this.game_data.receive_scoring_rate.length,
+            team_2: sumByKey(this.game_data.receive_scoring_rate, 'team_2') / this.game_data.receive_scoring_rate.length
+        }
+    }
+    // 計算每分平均時間
+    calcAverageScoringTime(){
+        this.game_data.average_scoring_time.length === 0 && this.calcGameAverageScoringTime()
+        return {
+            team_1: sumByKey(this.game_data.average_scoring_time, 'team_1') / this.game_data.average_scoring_time.length,
+            team_2: sumByKey(this.game_data.average_scoring_time, 'team_2') / this.game_data.average_scoring_time.length,
+        }
+    }
+    // 計算得分平均時間
+    calcAverageWinningTime(){
+        this.game_data.average_winning_time.length === 0 && this.calcGameAverageWinningTime()
+        return {
+            team_1: sumByKey(this.game_data.average_winning_time, 'team_1') / this.game_data.average_winning_time.length,
+            team_2: sumByKey(this.game_data.average_winning_time, 'team_2') / this.game_data.average_winning_time.length,
+        }
+    }
+    // 計算失分平均時間
+    calcAverageLosingTime(){
+        this.game_data.average_losing_time.length === 0 && this.calcGameAverageLosingTime()
+        return {
+            team_1: sumByKey(this.game_data.average_losing_time, 'team_1') / this.game_data.average_losing_time.length,
+            team_2: sumByKey(this.game_data.average_losing_time, 'team_2') / this.game_data.average_losing_time.length,
+        }
+    }
+    // 計算最大分時間
+    calcMaxScoreTime(){
+        this.game_data.max_score_time.length === 0 && this.calcGameMaxScoreTime()
+        return {
+            team_1: findMaxByKey(this.game_data.max_score_time, 'team_1'),
+            team_2: findMaxByKey(this.game_data.max_score_time, 'team_2'),
+        }
+    }
+    // 計算最小分時間
+    calcMinScoreTime(){
+        this.game_data.min_score_time.length === 0 && this.calcGameMinScoreTime()
+        return {
+            team_1: findMaxByKey(this.game_data.min_score_time, 'team_1'),
+            team_2: findMaxByKey(this.game_data.min_score_time, 'team_2'),
+        }
     }
 }

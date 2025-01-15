@@ -151,9 +151,7 @@ export default class Scoreboard extends Teams {
         this.updateServer()
 
         // 將資料傳入分析器
-        console.log(this)
         const analyzer = new Analyzer(this)
-        console.log(analyzer.get())
     }
 
     // 清除暫停
