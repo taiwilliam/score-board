@@ -22,7 +22,7 @@ export default class Scoreboard extends Teams {
     current_game = 0 // 第幾局
     current_server = null // 發球方
     start_time = null // 賽事開始時間
-    stop_time = null // 賽事結束時間
+    end_time = null // 賽事結束時間
     is_paused = false // 是否處於暫停狀態
     is_pre_finish = false // 是否處於比賽結束前狀態
     is_game_interval = false // 是否處於比賽局間間隔
@@ -38,6 +38,7 @@ export default class Scoreboard extends Teams {
     score_record = [] // 分數記錄
     game_record = [] // 單局分記錄
     match_record = {} // 局分記錄
+    result = {} // 比賽結果
 
     constructor(config) {
         super()
@@ -81,7 +82,7 @@ export default class Scoreboard extends Teams {
 
     // 停止計時器
     stop() {
-        this.stop_time = new Date() // 記錄停止時間
+        this.end_time = new Date() // 記錄停止時間
         this.updateTimer() // 更新計時器
         this.destroyInterval() // 銷毀計時器
         this.is_paused = false
@@ -150,8 +151,12 @@ export default class Scoreboard extends Teams {
         // 更新發球方
         this.updateServer()
 
+        // 紀錄結束時間
+        this.end_time = new Date()
+
         // 將資料傳入分析器
         const analyzer = new Analyzer(this)
+        this.result = analyzer.get()
     }
 
     // 清除暫停
@@ -263,7 +268,7 @@ export default class Scoreboard extends Teams {
     getTotalScoreTime() {
         let elapsed_ms = 0
         this.score_record.forEach(score_record => {
-            elapsed_ms += score_record.end_time - score_record.start_time
+            elapsed_ms += new Date(score_record.end_time).getTime() - new Date(score_record.start_time).getTime()
         })
         return elapsed_ms
     }

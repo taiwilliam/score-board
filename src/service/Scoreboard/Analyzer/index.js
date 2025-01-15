@@ -45,7 +45,10 @@ export default class Analyzer {
 
     get() {
         this.calculateAll()
-        return this.data
+        return {
+            data: this.data,
+            game_data: this.game_data
+        }
     }
 
     // 計算全部

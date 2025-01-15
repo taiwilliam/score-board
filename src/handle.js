@@ -1,6 +1,6 @@
 import Scoreboard from './service/Scoreboard'
 import handlerRender from './render'
-import { preventScreenSleep } from './service/Scoreboard/helper'
+import { preventScreenSleep, preventZoom  } from './service/Scoreboard/helper'
 
 const resumeBtnEl = document.querySelector('.js-resume-btn')
 const pauseBtnEl = document.querySelector('.js-pause-btn')
