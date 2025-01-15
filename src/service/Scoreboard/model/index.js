@@ -7,4 +7,8 @@ export * from './TimeoutRecord'
 export * from './ScoreRecord'
 export * from './GameRecord'
 export * from './MatchRecord'
+export * from './Data'
+export * from './GameData'
+export * from './GameScore'
+export * from './GameScoreDetail'
 

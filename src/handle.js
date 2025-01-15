@@ -9,6 +9,7 @@ const nextGameBtnEl = document.querySelector('.js-next-game-btn')
 const prevBtnEls = document.querySelectorAll('.js-prev-btn')
 const swapBtnEl = document.querySelector('.js-swap-btn')
 const startForm = document.getElementById('startForm')
+const finishBtn = document.querySelector('.js-finish-btn')
 const add_1_btn = document.querySelector('.js-add-1-btn')
 const add_2_btn = document.querySelector('.js-add-2-btn')
 
@@ -56,6 +57,12 @@ add_1_btn.addEventListener('click', () => {
 // 加分按紐 團隊二
 add_2_btn.addEventListener('click', () => {
     SBproxy.addScore(2)
+})
+
+// 完成按紐
+finishBtn.addEventListener('click', () => {
+    SBproxy.finish()
+    wakeLock.release()
 })
 
 // 開始賽事表單

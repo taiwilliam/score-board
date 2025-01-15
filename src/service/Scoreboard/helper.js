@@ -64,7 +64,7 @@ export const validateTeamId = team_id => {
 // container 容器對象
 // incoming 來源對象
 export const mergeObjects = (container, incoming) => {
-    const result = { ...container } // 複製容器對象
+    const result = JSON.parse(JSON.stringify(container)) // 複製容器對象
     for (const key in container) {
         if (incoming.hasOwnProperty(key)) {
             result[key] = incoming[key] // 覆蓋相同屬性的值
@@ -111,34 +111,34 @@ export const purePush = (array, value) => {
  * @returns {number} 當前的發球方 (1 或 2)。
  */
 export const calculateCurrentServer = (starting_server, score_1, score_2, max_score) => {
-    const totalScore = score_1 + score_2;
-    const opponent_id = starting_server === 1 ? 2 : 1;
+    const totalScore = score_1 + score_2 - 1 // 總得分（從 0 開始） 0,[1,2],[3,4],[5,6]...
+    const opponent_id = starting_server === 1 ? 2 : 1
 
     // deuce 規則（當雙方達到最大得分 - 1 時，每人輪流發 1 球）
     if (score_1 >= max_score - 1 && score_2 >= max_score - 1) {
-        return totalScore % 2 === 0 ? starting_server : opponent_id;
+        return totalScore % 2 === 0 ? starting_server : opponent_id
     }
 
     // 正常發球規則，每人輪發固定次數
-    const serveChangeInterval = 2; // 一般情況下每人發 2 球
-    const currentRound = Math.floor(totalScore / serveChangeInterval);
-    return currentRound % 2 === 0 ? starting_server : opponent_id;
+    const serveChangeInterval = 2 // 一般情況下每人發 2 球
+    const currentRound = Math.floor(totalScore / serveChangeInterval)
+    return currentRound % 2 === 0 ? starting_server : opponent_id
 }
 
 // 判斷分數是否達到局勝利條件
 export const isGameFinish = (score_1, score_2, max_score, deuce = true) => {
     // deuce 情況下則要多贏2分
-    if(deuce) {
+    if (deuce) {
         // 其中一方得分大於等於max_score分且分數差距大於等於對手2分
-        if(
-            (score_1 >= max_score && score_1 - score_2 >= 2) || 
+        if (
+            (score_1 >= max_score && score_1 - score_2 >= 2) ||
             (score_2 >= max_score && score_2 - score_1 >= 2)
         ) {
             return true
         }
-    }else{
+    } else {
         // 一般max_score分獲勝
-        if(score_1 === max_score || score_2 === max_score) {
+        if (score_1 === max_score || score_2 === max_score) {
             return true
         }
     }
@@ -147,7 +147,7 @@ export const isGameFinish = (score_1, score_2, max_score, deuce = true) => {
 }
 
 export const isMatchFinish = (score_1, score_2, max_score) => {
-    if(score_1 === max_score || score_2 === max_score) {
+    if (score_1 === max_score || score_2 === max_score) {
         return true
     }
     return false
@@ -157,32 +157,132 @@ export const isMatchFinish = (score_1, score_2, max_score) => {
  * 防止螢幕熄滅的函數
  */
 export const preventScreenSleep = async () => {
-    let wakeLock = null;
-  
+    let wakeLock = null
+
     try {
-      // 嘗試獲取螢幕喚醒鎖
-      wakeLock = await navigator.wakeLock.request('screen');
-      
-      // 處理喚醒鎖意外釋放（例如設備睡眠或切換標籤頁）
-      wakeLock.addEventListener('release', () => {
-        console.log('螢幕喚醒鎖已釋放');
-      });
+        // 嘗試獲取螢幕喚醒鎖
+        wakeLock = await navigator.wakeLock.request('screen')
+
+        // 處理喚醒鎖意外釋放（例如設備睡眠或切換標籤頁）
+        wakeLock.addEventListener('release', () => {
+            console.log('螢幕喚醒鎖已釋放')
+        })
     } catch (err) {
-      console.error('無法啟用螢幕喚醒鎖:', err);
+        console.error('無法啟用螢幕喚醒鎖:', err)
     }
-  
+
     // 返回喚醒鎖對象，方便日後釋放
-    return wakeLock;
-  }
-  
-  /**
-   * 釋放螢幕喚醒鎖的函數
-   * @param {WakeLockSentinel} wakeLock - 喚醒鎖對象
-   */
-  function releaseScreenSleep(wakeLock) {
+    return wakeLock
+}
+
+/**
+ * 釋放螢幕喚醒鎖的函數
+ * @param {WakeLockSentinel} wakeLock - 喚醒鎖對象
+ */
+export const releaseScreenSleep = wakeLock => {
     if (wakeLock) {
-      wakeLock.release().then(() => {
-        console.log('螢幕喚醒鎖已手動釋放');
-      });
+        wakeLock.release().then(() => {
+            console.log('螢幕喚醒鎖已手動釋放')
+        })
     }
-  }
+}
+
+/** 計算最大領先優勢
+ * @param {team_1} - [1,0,0,1,1...]
+ * @param {team_2} - [0,1,1,0,0...]
+ */
+export const calculateMaxLeadAdvantage = (team_1, team_2) => {
+    let lead_1 = 0
+    let lead_2 = 0
+    let max_lead_team_1 = 0
+    let max_lead_team_2 = 0
+
+    for (let i = 0; i < team_1.length; i++) {
+        lead_1 += team_1[i]
+        lead_2 += team_2[i]
+
+        const lead_difference = lead_1 - lead_2
+
+        if (lead_difference > 0) {
+            max_lead_team_1 = Math.max(max_lead_team_1, lead_difference)
+        } else if (lead_difference < 0) {
+            max_lead_team_2 = Math.max(max_lead_team_2, -lead_difference)
+        }
+    }
+
+    return {
+        team_1: max_lead_team_1,
+        team_2: max_lead_team_2
+    }
+}
+
+/** 計算最大連勝或連敗分
+ * @param {team} - [1,0,0,1,1...]
+ * @param {target} - 1 or 0 (要計算的目標)
+ */
+export const calculateMaxStreak = (team, target) => {
+    let max_streak = 0
+    let current_streak = 0
+
+    for (const point of team) {
+        if (point === target) {
+            current_streak++
+            max_streak = Math.max(max_streak, current_streak)
+        } else {
+            current_streak = 0
+        }
+    }
+
+    return max_streak
+}
+
+// 尋找陣列中某個屬性的最大值
+export const findMaxByKey = (data, key) => {
+    return data.reduce((max, current) => Math.max(max, current[key]), -Infinity)
+}
+
+// 計算最大落後追回分
+export const calculateMaxRecoveredDeficit = (team_1, team_2) => {
+    let maxDeficitRecoveredTeam1 = 0 // Team 1 最大落後追回分
+    let maxDeficitRecoveredTeam2 = 0 // Team 2 最大落後追回分
+
+    let score1 = 0 // Team 1 當前得分
+    let score2 = 0 // Team 2 當前得分
+    let deficitRecoveredTeam1 = 0 // Team 1 當前追回的分數
+    let deficitRecoveredTeam2 = 0 // Team 2 當前追回的分數
+
+    for (let i = 0; i < team_1.length; i++) {
+        score1 += team_1[i]
+        score2 += team_2[i]
+
+        const diff = score1 - score2
+
+        // Team 1 落後
+        if (diff < 0) {
+            deficitRecoveredTeam1 = Math.max(deficitRecoveredTeam1, Math.abs(diff));  // 累計落後分差
+        } else {
+            maxDeficitRecoveredTeam1 = Math.max(maxDeficitRecoveredTeam1, deficitRecoveredTeam1) // 更新最大落後追回分
+            deficitRecoveredTeam1 = 0 // 重置
+        }
+
+        // Team 2 落後
+        if (diff > 0) {
+            deficitRecoveredTeam2 =  Math.max(deficitRecoveredTeam2, diff); // 累計落後分差
+        } else {
+            maxDeficitRecoveredTeam2 = Math.max(maxDeficitRecoveredTeam2, deficitRecoveredTeam2) // 更新最大落後追回分
+            deficitRecoveredTeam2 = 0 // 重置
+        }
+    }
+
+    // 返回簡化結構
+    return {
+        team_1: maxDeficitRecoveredTeam1,
+        team_2: maxDeficitRecoveredTeam2
+    }
+}
+
+// 轉換成百分比
+// 比率、小數點位數
+export const toPercentage = (ratio, decimal = 2) => {
+    return (ratio * 100).toFixed(decimal);
+}

@@ -1,6 +1,7 @@
 import { Config, ScoreRecord, GameRecord, MatchRecord, ProcessRecord } from './model'
 import { UPDATE_INTERVAL, TEAM_ID_TO_NAME } from './constants'
 import Teams from './Teams'
+import Analyzer from './Analyzer'
 import {
     validateConfig,
     mergeObjects,
@@ -138,6 +139,23 @@ export default class Scoreboard extends Teams {
         }
     }
 
+    // 完成比賽
+    finish() {
+        // 更新局數
+        this.updateMatchRecord()
+
+        // 更新局分
+        this.updateGameRecord()
+
+        // 更新發球方
+        this.updateServer()
+
+        // 將資料傳入分析器
+        console.log(this)
+        const analyzer = new Analyzer(this)
+        console.log(analyzer.get())
+    }
+
     // 清除暫停
     clearPause() {
         this.is_paused = false
@@ -236,7 +254,7 @@ export default class Scoreboard extends Teams {
         this.interval_id = setInterval(() => this.updateTimer(), UPDATE_INTERVAL)
     }
 
-    // 恢復計時器 
+    // 恢復計時器
     resumeTimer() {
         const elapsed_ms = this.getTotalScoreTime()
         this.elapsed_ms = elapsed_ms
@@ -315,12 +333,14 @@ export default class Scoreboard extends Teams {
         const starting_server = even_game ? opponent_id : this.config.server
         // 獲得隊伍該局總得分
         const { team_1, team_2 } = this.getGameTotalScore()
-        this.current_server = calculateCurrentServer(
+        const server = calculateCurrentServer(
             starting_server,
             team_1,
             team_2,
             this.config.score
         )
+
+        this.current_server = server
     }
 
     // 獲得單局紀錄
@@ -349,7 +369,12 @@ export default class Scoreboard extends Teams {
         }
         this.game_record.forEach(record => {
             const { team_1, team_2 } = this.getGameTotalScore(record.game)
-            const is_game_finish = isGameFinish(team_1, team_2, this.config.score, this.config.deuce)
+            const is_game_finish = isGameFinish(
+                team_1,
+                team_2,
+                this.config.score,
+                this.config.deuce
+            )
             if (is_game_finish) {
                 const winner_team = team_1 > team_2 ? 'team_1' : 'team_2'
                 match_score[winner_team] += 1
@@ -460,7 +485,6 @@ export default class Scoreboard extends Teams {
         return end_time
     }
 
-
     // 獲得單局分
     getGameScore(team_id) {
         validateTeamId(team_id)
@@ -489,7 +513,14 @@ export default class Scoreboard extends Teams {
             const total_score = getTotalScore(record[team_key])
             const opponent_total_score = getTotalScore(record[opponent_key])
 
-            if (isGameFinish(total_score, opponent_total_score, this.config.score, this.config.deuce)) {
+            if (
+                isGameFinish(
+                    total_score,
+                    opponent_total_score,
+                    this.config.score,
+                    this.config.deuce
+                )
+            ) {
                 match_score.push(total_score > opponent_total_score ? 1 : 0)
             }
         })
