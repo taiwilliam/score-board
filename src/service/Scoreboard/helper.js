@@ -272,7 +272,7 @@ export const calculateMaxRecoveredDeficit = (team_1, team_2) => {
 
         // Team 2 落後
         if (diff > 0) {
-            deficitRecoveredTeam2 =  Math.max(deficitRecoveredTeam2, diff); // 累計落後分差
+            deficitRecoveredTeam2 = Math.max(deficitRecoveredTeam2, diff); // 累計落後分差
         } else {
             maxDeficitRecoveredTeam2 = Math.max(maxDeficitRecoveredTeam2, deficitRecoveredTeam2) // 更新最大落後追回分
             deficitRecoveredTeam2 = 0 // 重置
@@ -291,4 +291,23 @@ export const calculateMaxRecoveredDeficit = (team_1, team_2) => {
 export const toPercentage = (ratio, decimal = 2) => {
     const factor = Math.pow(10, decimal);
     return Math.round(ratio * 100 * factor) / factor;
+}
+
+// 封裝防止縮放的函數
+export const preventZoom = () => {
+    let lastTouchEnd = 0;
+
+    // 禁止雙擊放大
+    document.addEventListener('touchend', function (event) {
+        let now = new Date().getTime();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+
+    // 禁止手勢縮放
+    document.addEventListener('gesturestart', function (event) {
+        event.preventDefault();
+    }, false);
 }

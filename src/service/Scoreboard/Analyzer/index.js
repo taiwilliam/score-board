@@ -21,22 +21,22 @@ export default class Analyzer {
     data = Data
     game_data = GameData
 
-    constructor(scoreboard = null) {
+    constructor(scoreboard) {
         // 儲存比賽資料
-        // this.process_record = scoreboard.process_record // 比賽過程記錄
-        // this.timeout_record = scoreboard.timeout_record // 暫停記錄
-        // this.foul_record = scoreboard.foul_record // 犯規記錄
-        // this.score_record = scoreboard.score_record // 分數記錄
-        // this.game_record = scoreboard.game_record // 單局分記錄
-        // this.match_record = scoreboard.match_record // 局分記錄
+        this.process_record = scoreboard.process_record // 比賽過程記錄
+        this.timeout_record = scoreboard.timeout_record // 暫停記錄
+        this.foul_record = scoreboard.foul_record // 犯規記錄
+        this.score_record = scoreboard.score_record // 分數記錄
+        this.game_record = scoreboard.game_record // 單局分記錄
+        this.match_record = scoreboard.match_record // 局分記錄
 
         // 假資料
-        this.process_record = process_record
-        this.timeout_record = timeout_record
-        this.foul_record = foul_record
-        this.score_record = score_record
-        this.game_record = game_record
-        this.match_record = match_record
+        // this.process_record = process_record
+        // this.timeout_record = timeout_record
+        // this.foul_record = foul_record
+        // this.score_record = score_record
+        // this.game_record = game_record
+        // this.match_record = match_record
 
         // 預處理資料
         this.game_total_data = this.#initTotalPoint()

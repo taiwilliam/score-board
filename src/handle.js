@@ -16,6 +16,11 @@ const add_2_btn = document.querySelector('.js-add-2-btn')
 let SBproxy
 let wakeLock
 
+// DOM 加載完成後啟用防止縮放功能
+document.addEventListener('DOMContentLoaded', function () {
+    preventZoom();
+});
+
 // 繼續按紐
 resumeBtnEl.addEventListener('click', () => {
     SBproxy.resume()
@@ -28,7 +33,7 @@ pauseBtnEl.addEventListener('click', () => {
 
 // 重置按紐
 resetBtnEl.addEventListener('click', () => {
-//   proxy.stop();
+    //   proxy.stop();
 })
 
 // 開始下一局按紐
