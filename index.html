@@ -24,6 +24,9 @@
                     </div>
                     <div
                         class="btn x-btn shadow p-1 rounded-circle d-flex align-items-center justify-content-center"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#scoreboardOffcanvas"
+                        aria-controls="scoreboardOffcanvas"
                     >
                         <span class="material-symbols-outlined icon-font"> scoreboard </span>
                     </div>
@@ -269,6 +272,64 @@
                     ></button>
                 </div>
                 <div class="offcanvas-body">施工中...</div>
+            </div>
+
+            <!-- setting offcanvas -->
+            <div
+                class="offcanvas offcanvas-bottom"
+                style="height: 75vh"
+                tabindex="-1"
+                id="scoreboardOffcanvas"
+                aria-labelledby="scoreboardOffcanvasLabel"
+            >
+                <div class="offcanvas-header">
+                    <button
+                        type="button"
+                        class="btn-close text-reset"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                    ></button>
+                </div>
+                <div class="offcanvas-body">
+                    <table class="table x-table">
+                        <tbody class="js-scoreboard-tbody">
+                            <tr class="x-table-tr x-between-lg">
+                                <td>
+                                    <img
+                                        class="x-badge x-badge-lg"
+                                        src="https://mighty.tools/mockmind-api/content/human/1.jpg"
+                                        alt=""
+                                    />
+                                    <div class="x-text js-team-1"></div>
+                                </td>
+                                <td class=""></td>
+                                <td>
+                                    <img
+                                        class="x-badge x-badge-lg"
+                                        src="https://mighty.tools/mockmind-api/content/human/2.jpg"
+                                        alt=""
+                                    />
+                                    <div class="x-text js-team-2"></div>
+                                </td>
+                            </tr>
+                            <!-- <tr class="x-table-tr">
+                                <td>28</td>
+                                <td class="x-table-header">G1</td>
+                                <td>32</td>
+                            </tr>
+                            <tr class="x-table-tr">
+                                <td>18</td>
+                                <td class="x-table-header">G2</td>
+                                <td>20</td>
+                            </tr>
+                            <tr class="x-table-tr">
+                                <td>10</td>
+                                <td class="x-table-header">G3</td>
+                                <td>12</td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- start page -->

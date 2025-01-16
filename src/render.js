@@ -46,6 +46,7 @@ const handlerRender = {
         // 渲染小分
         if (property === 'game_record') {
             renderScore(value, target.current_game)
+            renderGameOffcanvas(value)
         }
 
         // 渲染大分
@@ -444,6 +445,26 @@ const renderMatchTime = (start_time, end_time) => {
     match_time_el.textContent = match_time
 }
 
-// renderFinishPage(score_data)
+// 渲染分數紀錄談窗
+const renderGameOffcanvas = game_record => {
+    const scoreboard_tbody = document.querySelector('.js-scoreboard-tbody')
+    const scoreboard_tr = document.querySelectorAll('.js-scoreboard-tr')
+    // 清除
+    scoreboard_tr.forEach(tr => tr.remove())
+    game_record.forEach(record => {
+        const team_1_score = getTotalScore(record.team_1)
+        const team_2_score = getTotalScore(record.team_2)
+        const team_1_active = team_1_score > team_2_score ? ' active' : ''
+        const team_2_active = team_2_score > team_1_score ? ' active' : ''
+        const html = `
+            <tr class="x-table-tr x-between-lg js-scoreboard-tr">
+                <td class="${team_1_active}">${team_1_score}</td>
+                <td class="x-table-header">G${record.game}</td>
+                <td class="${team_2_active}">${team_2_score}</td>
+            </tr>
+        `
+        scoreboard_tbody.insertAdjacentHTML("beforeend",html)
+    })
+}
 
 export default handlerRender

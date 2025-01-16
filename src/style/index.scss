@@ -182,6 +182,14 @@ body {
         td:last-of-type {
             width: 25%;
         }
+        &.x-between-lg {
+            td:first-of-type {
+                width: 40%;
+            }
+            td:last-of-type {
+                width: 40%;
+            }
+        }
     }
 }
 
