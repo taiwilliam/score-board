@@ -23,6 +23,7 @@ export default class Scoreboard extends Teams {
     current_server = null // 發球方
     start_time = null // 賽事開始時間
     end_time = null // 賽事結束時間
+    is_finish = false // 是否已經完成賽事
     is_paused = false // 是否處於暫停狀態
     is_pre_finish = false // 是否處於比賽結束前狀態
     is_game_interval = false // 是否處於比賽局間間隔
@@ -156,7 +157,8 @@ export default class Scoreboard extends Teams {
         this.result = analyzer.get()
         
         // 紀錄結束時間
-        this.end_time = new Date()
+        this.end_time = this.getEndTime()
+        this.is_finish = true
     }
 
     // 清除暫停
@@ -190,6 +192,16 @@ export default class Scoreboard extends Teams {
         // 驗證參數正確
         validateConfig(config)
         return mergeObjects(Config, config)
+    }
+
+    // 獲取結束時間
+    getEndTime() {
+        const totalMilliseconds = this.score_record.reduce((acc, cur) => {
+            const startTime = new Date(cur.start_time).getTime();
+            const endTime = new Date(cur.end_time).getTime();
+            return acc + (endTime - startTime);
+        }, 0);
+        return new Date(new Date(this.start_time).getTime() + totalMilliseconds);
     }
 
     // 更新局分

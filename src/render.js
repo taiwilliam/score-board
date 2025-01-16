@@ -53,9 +53,8 @@ const handlerRender = {
         }
 
         // 比賽結束
-        if (property === 'end_time') {
+        if (property === 'is_finish') {
             renderPreFinish(false)
-            console.log(target)
             renderFinishPage(target)
         }
 
@@ -221,7 +220,6 @@ const renderTeam = (team_1, team_2) => {
 
 // 渲染完成畫面
 const renderFinishPage = score_data => {
-    console.log(score_data)
     const result = score_data.result
     // 開啟完成畫面
     openFinishPage()
