@@ -311,3 +311,8 @@ export const preventZoom = () => {
         event.preventDefault();
     }, false);
 }
+
+export const formatMilliseconds = (ms) => {
+    // 將毫秒轉為秒，保留一位小數
+    return (ms / 1000).toFixed(1) + 's';
+}

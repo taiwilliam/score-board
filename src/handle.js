@@ -78,6 +78,36 @@ startForm.addEventListener('submit', e => {
     submitStartForm(formData)
 })
 
+// 導航按紐
+document.addEventListener('click', (event) => {
+    // 確保點擊的目標是帶有 js-nav-btn 類的元素或其子元素
+    const navItem = event.target.closest('.js-nav-btn');
+
+    if (navItem) {
+        handleClickNavBtn(navItem)
+    }
+});
+
+// 點擊導航按鈕
+const handleClickNavBtn = (navItem) => {
+    // 獲取 data-id 值
+    const nav_Id = navItem.dataset.id;
+    const tr_els = document.querySelectorAll('.js-stats-tr');
+    const show_tr_els = document.querySelectorAll(`.js-stats-tr[data-id="${nav_Id}"]`);
+    const btn_els = document.querySelectorAll('.js-nav-btn');
+    const show_btn_el = document.querySelectorAll(`.js-nav-btn[data-id="${nav_Id}"]`);
+
+    console.log(show_btn_el)
+
+    // 隱藏全部並顯示指定btn
+    btn_els.forEach(btn_el => btn_el.classList.remove('active'));
+    show_btn_el.forEach(show_btn_el => show_btn_el.classList.add('active'));
+
+    // 隱藏全部並顯示指定content
+    tr_els.forEach(tr_el => tr_el.classList.add('d-none'));
+    show_tr_els.forEach(show_el => show_el.classList.remove('d-none'));
+}
+
 // 提交開始賽事表單
 const submitStartForm = async formData => {
     const formObject = Object.fromEntries(formData.entries())

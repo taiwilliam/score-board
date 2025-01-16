@@ -77,6 +77,7 @@ export default class Analyzer {
 
         // 總數據
         // 得分
+        this.data.match_score = this.calcMatchScore()
         this.data.total_score = this.calcTotalScore()
         this.data.serve_score = this.calcServeScore()
         this.data.receive_score = this.calcReceiveScore()
@@ -344,6 +345,13 @@ export default class Analyzer {
           team_2: score_time.time
         }
       })
+    }
+    // 計算比賽局分
+    calcMatchScore() {
+        return {
+            team_1: this.match_record.team_1.reduce((accumulator, current) => accumulator + current, 0),
+            team_2: this.match_record.team_2.reduce((accumulator, current) => accumulator + current, 0)
+        }
     }
     // 計算總分
     calcTotalScore() {

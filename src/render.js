@@ -1,294 +1,6 @@
-import { getTotalScore } from './service/Scoreboard/helper'
-const fakeData = {
-    "data": {
-        "total_score": {
-            "team_1": 11,
-                "team_2": 22
-        },
-        "serve_score": {
-            "team_1": 4,
-                "team_2": 10
-        },
-        "receive_score": {
-            "team_1": 7,
-                "team_2": 12
-        },
-        "max_lead_score": {
-            "team_1": 0,
-                "team_2": 7
-        },
-        "max_winning_streak": {
-            "team_1": 3,
-                "team_2": 7
-        },
-        "max_losing_streak": {
-            "team_1": 7,
-                "team_2": 3
-        },
-        "max_recovered_deficit": {
-            "team_1": 3,
-                "team_2": 0
-        },
-        "scoring_rate": {
-            "team_1": null,
-                "team_2": null
-        },
-        "serve_scoring_rate": {
-            "team_1": null,
-                "team_2": null
-        },
-        "receive_scoring_rate": {
-            "team_1": null,
-                "team_2": null
-        },
-        "post_timeout_scoring_rate": null,
-            "average_scoring_time": {
-            "team_1": null,
-                "team_2": null
-        },
-        "average_winning_time": {
-            "team_1": 635.8214285714286,
-                "team_2": 701.6363636363636
-        },
-        "average_losing_time": {
-            "team_1": 701.6363636363636,
-                "team_2": 635.8214285714286
-        },
-        "max_score_time": {
-            "team_1": 1538,
-                "team_2": 1538
-        },
-        "min_score_time": {
-            "team_1": 390,
-                "team_2": 390
-        }
-    },
-    "game_data": {
-        "total_score": [
-            {
-                "game": 1,
-                "team_1": 4,
-                "team_2": 11
-            },
-            {
-                "game": 2,
-                "team_1": 7,
-                "team_2": 11
-            },
-            {
-                "game": 3,
-                "team_1": 0,
-                "team_2": 0
-            }
-        ],
-            "serve_score": [
-                {
-                    "game": 1,
-                    "team_1": 0,
-                    "team_2": 3
-                },
-                {
-                    "game": 2,
-                    "team_1": 4,
-                    "team_2": 7
-                },
-                {
-                    "game": 3,
-                    "team_1": 0,
-                    "team_2": 0
-                }
-            ],
-                "receive_score": [
-                    {
-                        "game": 1,
-                        "team_1": 4,
-                        "team_2": 8
-                    },
-                    {
-                        "game": 2,
-                        "team_1": 3,
-                        "team_2": 4
-                    },
-                    {
-                        "game": 3,
-                        "team_1": 0,
-                        "team_2": 0
-                    }
-                ],
-                    "max_lead_score": [
-                        {
-                            "team_1": 0,
-                            "team_2": 7
-                        },
-                        {
-                            "team_1": 0,
-                            "team_2": 4
-                        }
-                    ],
-                        "max_winning_streak": [
-                            {
-                                "team_1": 2,
-                                "team_2": 7
-                            },
-                            {
-                                "team_1": 3,
-                                "team_2": 4
-                            }
-                        ],
-                            "max_losing_streak": [
-                                {
-                                    "team_1": 7,
-                                    "team_2": 2
-                                },
-                                {
-                                    "team_1": 4,
-                                    "team_2": 3
-                                }
-                            ],
-                                "max_recovered_deficit": [
-                                    {
-                                        "game": 1,
-                                        "team_1": 2,
-                                        "team_2": 0
-                                    },
-                                    {
-                                        "game": 2,
-                                        "team_1": 3,
-                                        "team_2": 0
-                                    }
-                                ],
-                                    "scoring_rate": [
-                                        {
-                                            "game": 1,
-                                            "team_1": 26.67,
-                                            "team_2": 73.33
-                                        },
-                                        {
-                                            "game": 2,
-                                            "team_1": 38.89,
-                                            "team_2": 61.11
-                                        },
-                                        {
-                                            "game": 3,
-                                            "team_1": null,
-                                            "team_2": null
-                                        }
-                                    ],
-                                        "serve_scoring_rate": [
-                                            {
-                                                "game": 1,
-                                                "team_1": 0,
-                                                "team_2": 42.86
-                                            },
-                                            {
-                                                "game": 2,
-                                                "team_1": 50,
-                                                "team_2": 70
-                                            },
-                                            {
-                                                "game": 3,
-                                                "team_1": null,
-                                                "team_2": null
-                                            }
-                                        ],
-                                            "receive_scoring_rate": [
-                                                {
-                                                    "game": 1,
-                                                    "team_1": 57.14,
-                                                    "team_2": 100
-                                                },
-                                                {
-                                                    "game": 2,
-                                                    "team_1": 30,
-                                                    "team_2": 50
-                                                },
-                                                {
-                                                    "game": 3,
-                                                    "team_1": null,
-                                                    "team_2": null
-                                                }
-                                            ],
-                                                "post_timeout_scoring_rate": [],
-                                                    "game_time": [
-                                                        {
-                                                            "game": 1,
-                                                            "team_1": 9982,
-                                                            "team_2": 9982
-                                                        },
-                                                        {
-                                                            "game": 2,
-                                                            "team_1": 12341,
-                                                            "team_2": 12341
-                                                        },
-                                                        {
-                                                            "game": 3,
-                                                            "team_1": 0,
-                                                            "team_2": 0
-                                                        }
-                                                    ],
-                                                        "average_scoring_time": [
-                                                            {
-                                                                "game": 1,
-                                                                "team_1": 665.4666666666667,
-                                                                "team_2": 665.4666666666667
-                                                            },
-                                                            {
-                                                                "game": 2,
-                                                                "team_1": 685.6111111111111,
-                                                                "team_2": 685.6111111111111
-                                                            },
-                                                            {
-                                                                "game": 3,
-                                                                "team_1": null,
-                                                                "team_2": null
-                                                            }
-                                                        ],
-                                                            "average_winning_time": [
-                                                                {
-                                                                    "game": 1,
-                                                                    "team_1": 671.5,
-                                                                    "team_2": 663.2727272727273
-                                                                },
-                                                                {
-                                                                    "game": 2,
-                                                                    "team_1": 600.1428571428571,
-                                                                    "team_2": 740
-                                                                }
-                                                            ],
-                                                                "average_losing_time": [
-                                                                    {
-                                                                        "game": 1,
-                                                                        "team_1": 663.2727272727273,
-                                                                        "team_2": 671.5
-                                                                    },
-                                                                    {
-                                                                        "game": 2,
-                                                                        "team_1": 740,
-                                                                        "team_2": 600.1428571428571
-                                                                    }
-                                                                ],
-                                                                    "max_score_time": [
-                                                                        {
-                                                                            "team_1": 1098,
-                                                                            "team_2": 1098
-                                                                        },
-                                                                        {
-                                                                            "team_1": 1538,
-                                                                            "team_2": 1538
-                                                                        }
-                                                                    ],
-                                                                        "min_score_time": [
-                                                                            {
-                                                                                "team_1": 390,
-                                                                                "team_2": 390
-                                                                            },
-                                                                            {
-                                                                                "team_1": 297,
-                                                                                "team_2": 297
-                                                                            }
-                                                                        ]
-    }
-}
+import { getTotalScore, formatTime, formatMilliseconds } from './service/Scoreboard/helper'
+import { DATA_NAME_MAPPING, GAME_DATA_NAME_MAPPING } from './service/Scoreboard/constants'
+import { score_data } from './fakedata'
 
 const handlerRender = {
     set(target, property, value) {
@@ -343,7 +55,8 @@ const handlerRender = {
         // 比賽結束
         if (property === 'end_time') {
             renderPreFinish(false)
-            renderFinishPage(fakeData)
+            console.log(target)
+            renderFinishPage(target)
         }
 
         target[property] = value
@@ -386,7 +99,7 @@ const renderScore = (score_record, game) => {
 }
 
 // 渲染大分
-const renderMachScore = (match_record) => {
+const renderMachScore = match_record => {
     const team_1_score = document.querySelector('.js-match-score-1')
     const team_2_score = document.querySelector('.js-match-score-2')
     const match_point_1 = document.querySelectorAll('.js-point-1')
@@ -457,8 +170,6 @@ const renderPreFinish = is_pre_finish => {
 
 // 初始畫畫面
 const initPage = value => {
-    const team_1_name = document.querySelector('.js-team-1')
-    const team_2_name = document.querySelector('.js-team-2')
     const team_1_points = document.querySelectorAll('.js-point-1')
     const team_2_points = document.querySelectorAll('.js-point-2')
     const team_1_timeout_count = document.querySelector('.js-timeout-count-1')
@@ -466,9 +177,8 @@ const initPage = value => {
     const team_1_timeout_btn = document.querySelector('.js-timeout-btn-1')
     const team_2_timeout_btn = document.querySelector('.js-timeout-btn-2')
 
-    // 渲染球員
-    team_1_name.textContent = value.teams[0].name
-    team_2_name.textContent = value.teams[1].name
+    // 渲染隊伍
+    renderTeam(value.teams[0], value.teams[1])
 
     // 渲染暫停
     team_1_timeout_count.textContent = value.config.timeout_count
@@ -495,9 +205,238 @@ const initPage = value => {
     })
 }
 
-const renderFinishPage = () => {
+// 渲染隊伍
+const renderTeam = (team_1, team_2) => {
+    const team_1_name_els = document.querySelectorAll('.js-team-1')
+    const team_2_name_els = document.querySelectorAll('.js-team-2')
+
+    // 渲染球員
+    team_1_name_els.forEach(team_1_name => {
+        team_1_name.textContent = team_1.name
+    })
+    team_2_name_els.forEach(team_2_name => {
+        team_2_name.textContent = team_2.name
+    })
+}
+
+// 渲染完成畫面
+const renderFinishPage = score_data => {
+    console.log(score_data)
+    const result = score_data.result
+    // 開啟完成畫面
+    openFinishPage()
+    // 渲染隊伍
+    renderTeam(score_data.teams[0], score_data.teams[1])
+    // 渲染大分
+    renderFinishTopScore(result.data.match_score.team_1, result.data.match_score.team_2)
+    // 渲染賽事時間
+    renderMatchTime(score_data.start_time, score_data.end_time)
+    // 渲染Match Score
+    renderMatchScore(result.data.match_score, result.game_data.total_score)
+    // 渲染Match Stats
+    renderMatchStats(score_data.match_record, result.data, result.game_data)
+}
+
+// 渲染Match Stats
+const renderMatchStats = (match_record, match_data, game_data) => {
+    // 渲染Match Stats Tab
+    renderMatchStatsTab(match_record)
+
+    // 渲染Match Stats Content
+    renderMatchStatsContent(match_data, game_data)
+}
+
+// 渲染Match Stats Content
+const renderMatchStatsContent = (match_data, game_data) => {
+    const DATA_HIDE_KEY = ['match_score']
+    const GAME_DATA_HIDE_KEY = []
+
+    const new_game_data = formatGameData(game_data)
+
+    new_game_data.forEach((game_data, index) => {
+        renderMatchStatsTr(game_data, GAME_DATA_HIDE_KEY, index + 1, false)
+    })
+
+    // 渲染Match Stats Match Content
+    renderMatchStatsTr(match_data, DATA_HIDE_KEY, 0, true)
+}
+
+const formatGameData = game_data => {
+    const game_count = game_data.total_score.length
+    const new_game_data = [{}, {}, {}]
+    for (let i = 0; i < game_count; i++) {
+        for (const key in game_data) {
+            new_game_data[i][key] = game_data[key][i]
+        }
+    }
+    return new_game_data.reverse()
+}
+
+// 渲染Match Stats Tr
+const renderMatchStatsTr = (match_data, hide_key_arr, nav_key, isMatch = true) => {
+    const match_stats_tab = document.querySelector('.js-match-stats-tab')
+
+    let html = ''
+    for (const key in match_data) {
+        if (match_data[key]) {
+            // 排除不顯是的資料
+            if (hide_key_arr.includes(key)) continue
+
+            const name = isMatch ? DATA_NAME_MAPPING[key] : GAME_DATA_NAME_MAPPING[key]
+            const { team_1, team_2 } = match_data[key]
+            let team_1_string =
+                !Number.isInteger(team_1) && typeof team_1 === 'number' ? team_1.toFixed(2) : team_1
+            let team_2_string =
+                !Number.isInteger(team_2) && typeof team_2 === 'number' ? team_2.toFixed(2) : team_2
+
+            // 時間格式化
+            if (key.includes('_time')) {
+                team_1_string = formatMilliseconds(team_1_string)
+                team_2_string = formatMilliseconds(team_2_string)
+            }
+
+            // 比率格式化
+            if (key.includes('_rate')) {
+                team_1_string = `${team_1_string}%`
+                team_2_string = `${team_2_string}%`
+            }
+
+            html += `
+                <tr class="x-table-tr js-stats-tr${ isMatch ? '' : ' d-none' }" data-id="${nav_key}">
+                    <td data="${team_1}">${team_1_string}</td>
+                    <td class="x-table-header">${name}</td>
+                    <td data="${team_2}">${team_2_string}</td>
+                </tr>
+            `
+        }
+    }
+
+    match_stats_tab.insertAdjacentHTML('afterend', html)
+}
+
+// 渲染Match Stats Tab
+const renderMatchStatsTab = match_record => {
+    const match_tab = document.querySelector('.js-table-tab')
+    let html = ''
+    for (let i = 0; i <= match_record.team_1.length; i++) {
+        const name = i === 0 ? 'Match' : `G${i}`
+        const active = i === 0 ? ' active' : ''
+        html += `<li class="nav-item">
+            <a class="nav-link js-nav-btn${active}" href="#" data-id="${i}">${name}</a>
+        </li>`
+    }
+    match_tab.innerHTML = html
+}
+
+// 渲染Match Score
+const renderMatchScore = (match_data, game_data) => {
+    const match_score_title = document.querySelector('.js-match-score-title')
+    const match_score_1_tr = document.querySelector('.js-match-score-tr-1')
+    const match_score_2_tr = document.querySelector('.js-match-score-tr-2')
+    const match_score_1_td = match_score_1_tr.querySelectorAll('td')
+    const match_score_2_td = match_score_2_tr.querySelectorAll('td')
+    const { team_1: team_1_match_score, team_2: team_2_match_score } = match_data
+
+    // 清除td
+    clearMatchScoreTd(match_score_1_td, match_score_2_td)
+
+    // 渲染小分 td
+    renderMatchScoreSmallTd(
+        game_data,
+        match_score_1_tr,
+        match_score_2_tr
+    )
+
+    // 渲染大分 td
+    renderMatchScoreBigTd(
+        team_1_match_score,
+        team_2_match_score,
+        match_score_1_tr,
+        match_score_2_tr
+    )
+
+    match_score_title.setAttribute('colspan', game_data.length + 1 + 1)
+}
+
+// 清除score match td
+const clearMatchScoreTd = (match_score_1_td, match_score_2_td) => {
+    match_score_1_td.forEach(td => td.remove())
+    match_score_2_td.forEach(td => td.remove())
+}
+
+// 渲染大分 td
+const renderMatchScoreBigTd = (
+    team_1_match_score,
+    team_2_match_score,
+    match_score_1_tr,
+    match_score_2_tr
+) => {
+    const match_score_1_th = match_score_1_tr.querySelector('th')
+    const match_score_2_th = match_score_2_tr.querySelector('th')
+    const td_header_1 = document.createElement('td')
+    const td_header_2 = document.createElement('td')
+    td_header_1.classList.add('x-table-header')
+    td_header_2.classList.add('x-table-header')
+    td_header_1.textContent = team_1_match_score
+    td_header_2.textContent = team_2_match_score
+    team_1_match_score > team_2_match_score
+        ? td_header_1.classList.add('active')
+        : td_header_2.classList.add('active')
+    match_score_1_tr.insertBefore(td_header_1, match_score_1_th.nextSibling)
+    match_score_2_tr.insertBefore(td_header_2, match_score_2_th.nextSibling)
+}
+
+// 渲染小分 td
+const renderMatchScoreSmallTd = (
+    game_score,
+    match_score_1_tr,
+    match_score_2_tr
+) => {
+    const reverse_game_score = game_score.reverse()
+    const match_score_1_th = match_score_1_tr.querySelector('th')
+    const match_score_2_th = match_score_2_tr.querySelector('th')
+
+    reverse_game_score.forEach((score, index) => {
+        const td_1_el = document.createElement('td')
+        const td_2_el = document.createElement('td')
+        const score_1 = score.team_1
+        const score_2 = score.team_2
+        td_1_el.textContent = score_1
+        td_2_el.textContent = score_2
+        score_1 > score_2 ? td_1_el.classList.add('active') : td_2_el.classList.add('active')
+
+        match_score_1_tr.insertBefore(td_1_el, match_score_1_th.nextSibling)
+        match_score_2_tr.insertBefore(td_2_el, match_score_2_th.nextSibling)
+    })
+}
+
+// 開啟完成畫面
+const openFinishPage = () => {
     const finish_screen = document.querySelector('.js-finish-screen')
     finish_screen.classList.remove('d-none')
+}
+
+// 渲染完成畫面Top
+const renderFinishTopScore = (score_1, score_2) => {
+    const match_score_1 = document.querySelector('.js-top-match-score-1')
+    const match_score_2 = document.querySelector('.js-top-match-score-2')
+
+    match_score_1.textContent = score_1
+    match_score_2.textContent = score_2
+    if (score_1 > score_2) {
+        match_score_1.classList.add('text-primary')
+    } else {
+        match_score_2.classList.add('text-primary')
+    }
+}
+// 渲染賽事時間
+const renderMatchTime = (start_time, end_time) => {
+    const match_time_el = document.querySelector('.js-match-time')
+    const start = new Date(start_time).getTime()
+    const end = new Date(end_time).getTime()
+    const match_time = formatTime(end - start)
+
+    match_time_el.textContent = match_time
 }
 
 export default handlerRender

@@ -151,12 +151,12 @@ export default class Scoreboard extends Teams {
         // 更新發球方
         this.updateServer()
 
-        // 紀錄結束時間
-        this.end_time = new Date()
-
         // 將資料傳入分析器
         const analyzer = new Analyzer(this)
         this.result = analyzer.get()
+        
+        // 紀錄結束時間
+        this.end_time = new Date()
     }
 
     // 清除暫停

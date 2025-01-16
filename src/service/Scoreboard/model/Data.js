@@ -1,5 +1,6 @@
 export const Data = {
     // 分數相關
+    match_score: null, //局分
     total_score: null, //總分
     serve_score: null, //發球得分
     receive_score: null, //接發球得分
