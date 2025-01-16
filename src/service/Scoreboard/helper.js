@@ -111,7 +111,7 @@ export const purePush = (array, value) => {
  * @returns {number} 當前的發球方 (1 或 2)。
  */
 export const calculateCurrentServer = (starting_server, score_1, score_2, max_score) => {
-    const totalScore = score_1 + score_2 // 總得分（從 0 開始） 0,[1,2],[3,4],[5,6]...
+    const totalScore = score_1 + score_2 - 1 // 總得分（從 0 開始） 0,[1,2],[3,4],[5,6]...
     const opponent_id = starting_server === 1 ? 2 : 1
 
     // deuce 規則（當雙方達到最大得分 - 1 時，每人輪流發 1 球）
@@ -123,7 +123,7 @@ export const calculateCurrentServer = (starting_server, score_1, score_2, max_sc
     const serveChangeInterval = 2 // 一般情況下每人發 2 球
     const currentRound = Math.floor(totalScore / serveChangeInterval)
     // 開局時直接回傳開局發球方
-    if(score_1 === 0 && score_2 === 0) return starting_server
+    if (score_1 === 0 && score_2 === 0) return starting_server
     // 回傳當前發球方
     return currentRound % 2 === 0 ? starting_server : opponent_id
 }
@@ -315,7 +315,19 @@ export const preventZoom = () => {
     }, false);
 }
 
+// 將毫秒轉為秒
 export const formatMilliseconds = (ms) => {
+    if (!isNumeric(ms)) return ms;
     // 將毫秒轉為秒，保留一位小數
-    return (ms / 1000).toFixed(1) + 's';
+    return (ms / 1000).toFixed(1);
+}
+
+// 是否為浮點數
+export const isFloat = value => {
+    return Number.isFinite(value) && !Number.isInteger(value);
+}
+
+// 檢查一個值是否能被解析為數字()
+export const isNumeric = (value) => {
+    return !isNaN(parseFloat(value)) && isFinite(value);
 }

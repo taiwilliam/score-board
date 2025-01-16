@@ -9,3 +9,8 @@ import '@fontsource/material-symbols-outlined/100.css'
 
 import './style/index.scss'
 import './handle'
+
+// import Analyzer from './service/Scoreboard/Analyzer'
+
+// const analyzer = new Analyzer()
+// console.log(analyzer.get())

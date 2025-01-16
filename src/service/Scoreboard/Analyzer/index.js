@@ -1,12 +1,12 @@
 import { Data, GameScore, GameScoreDetail, GameData } from '../model'
-import {
-    process_record,
-    timeout_record,
-    foul_record,
-    score_record,
-    game_record,
-    match_record
-} from './fakeData'
+// import {
+//     process_record,
+//     timeout_record,
+//     foul_record,
+//     score_record,
+//     game_record,
+//     match_record
+// } from './fakeData'
 import {
     mergeObjects,
     calculateMaxLeadScore,
@@ -45,6 +45,7 @@ export default class Analyzer {
 
     get() {
         this.calculateAll()
+        
         return {
             data: this.data,
             game_data: this.game_data
@@ -99,7 +100,7 @@ export default class Analyzer {
     }
     // 初始化總分
     #initTotalPoint() {
-        const game_total_score = game_record.map(game =>
+        const game_total_score = this.game_record.map(game =>
             mergeObjects(GameScoreDetail, { game: game.game })
         )
 

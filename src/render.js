@@ -1,7 +1,8 @@
-import { getTotalScore, formatTime, formatMilliseconds } from './service/Scoreboard/helper'
+import { getTotalScore, formatTime, formatMilliseconds, isFloat, isNumeric } from './service/Scoreboard/helper'
 import { DATA_NAME_MAPPING, GAME_DATA_NAME_MAPPING } from './service/Scoreboard/constants'
-import { score_data } from './fakedata'
+// import { score_data } from './fakeData'
 
+// 渲染
 const handlerRender = {
     set(target, property, value) {
         // 渲染計時器
@@ -261,7 +262,7 @@ const renderMatchStatsContent = (match_data, game_data) => {
 
 const formatGameData = game_data => {
     const game_count = game_data.total_score.length
-    const new_game_data = [{}, {}, {}]
+    const new_game_data = Array.from({ length: game_count }, () => ({}));
     for (let i = 0; i < game_count; i++) {
         for (const key in game_data) {
             new_game_data[i][key] = game_data[key][i]
@@ -281,29 +282,39 @@ const renderMatchStatsTr = (match_data, hide_key_arr, nav_key, isMatch = true) =
             if (hide_key_arr.includes(key)) continue
 
             const name = isMatch ? DATA_NAME_MAPPING[key] : GAME_DATA_NAME_MAPPING[key]
-            const { team_1, team_2 } = match_data[key]
-            let team_1_string =
-                !Number.isInteger(team_1) && typeof team_1 === 'number' ? team_1.toFixed(2) : team_1
-            let team_2_string =
-                !Number.isInteger(team_2) && typeof team_2 === 'number' ? team_2.toFixed(2) : team_2
+            const { team_1: team_1_score, team_2: team_2_score } = match_data[key]
+            let team_1_string = ''
+            let team_2_string = ''
+            
+            // NaN 轉為 '-'
+            team_1_string = Number.isNaN(team_1_score) ? '-' : team_1_score
+            team_2_string = Number.isNaN(team_2_score) ? '-' : team_2_score
+
+            // 過長的浮點數轉為小數點後兩位
+            if(isFloat(team_1_string)) team_1_string = team_1_string.toFixed(2)
+            if(isFloat(team_2_string)) team_2_string = team_2_string.toFixed(2)
 
             // 時間格式化
             if (key.includes('_time')) {
                 team_1_string = formatMilliseconds(team_1_string)
                 team_2_string = formatMilliseconds(team_2_string)
+
+                // 時間格式化後加上 s
+                if(isNumeric(team_1_string)) team_1_string += 's'
+                if(isNumeric(team_2_string)) team_2_string += 's'
             }
 
             // 比率格式化
             if (key.includes('_rate')) {
-                team_1_string = `${team_1_string}%`
-                team_2_string = `${team_2_string}%`
+                team_1_string += '%'
+                team_2_string += '%'
             }
 
             html += `
                 <tr class="x-table-tr js-stats-tr${ isMatch ? '' : ' d-none' }" data-id="${nav_key}">
-                    <td data="${team_1}">${team_1_string}</td>
+                    <td data="${team_1_score}">${team_1_string}</td>
                     <td class="x-table-header">${name}</td>
-                    <td data="${team_2}">${team_2_string}</td>
+                    <td data="${team_2_score}">${team_2_string}</td>
                 </tr>
             `
         }
@@ -390,11 +401,7 @@ const renderMatchScoreSmallTd = (
     match_score_1_tr,
     match_score_2_tr
 ) => {
-    const reverse_game_score = game_score.reverse()
-    const match_score_1_th = match_score_1_tr.querySelector('th')
-    const match_score_2_th = match_score_2_tr.querySelector('th')
-
-    reverse_game_score.forEach((score, index) => {
+    game_score.forEach((score, index) => {
         const td_1_el = document.createElement('td')
         const td_2_el = document.createElement('td')
         const score_1 = score.team_1
@@ -403,8 +410,8 @@ const renderMatchScoreSmallTd = (
         td_2_el.textContent = score_2
         score_1 > score_2 ? td_1_el.classList.add('active') : td_2_el.classList.add('active')
 
-        match_score_1_tr.insertBefore(td_1_el, match_score_1_th.nextSibling)
-        match_score_2_tr.insertBefore(td_2_el, match_score_2_th.nextSibling)
+        match_score_1_tr.appendChild(td_1_el)
+        match_score_2_tr.appendChild(td_2_el)
     })
 }
 
@@ -436,5 +443,7 @@ const renderMatchTime = (start_time, end_time) => {
 
     match_time_el.textContent = match_time
 }
+
+// renderFinishPage(score_data)
 
 export default handlerRender

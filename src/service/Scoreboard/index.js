@@ -159,6 +159,7 @@ export default class Scoreboard extends Teams {
         // 紀錄結束時間
         this.end_time = this.getEndTime()
         this.is_finish = true
+
     }
 
     // 清除暫停
