@@ -122,6 +122,9 @@ export const calculateCurrentServer = (starting_server, score_1, score_2, max_sc
     // 正常發球規則，每人輪發固定次數
     const serveChangeInterval = 2 // 一般情況下每人發 2 球
     const currentRound = Math.floor(totalScore / serveChangeInterval)
+    // 開局時直接回傳開局發球方
+    if(score_1 === 0 && score_2 === 0) return starting_server
+    // 回傳當前發球方
     return currentRound % 2 === 0 ? starting_server : opponent_id
 }
 
