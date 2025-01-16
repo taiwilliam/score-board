@@ -97,8 +97,6 @@ const handleClickNavBtn = (navItem) => {
     const btn_els = document.querySelectorAll('.js-nav-btn');
     const show_btn_el = document.querySelectorAll(`.js-nav-btn[data-id="${nav_Id}"]`);
 
-    console.log(show_btn_el)
-
     // 隱藏全部並顯示指定btn
     btn_els.forEach(btn_el => btn_el.classList.remove('active'));
     show_btn_el.forEach(show_btn_el => show_btn_el.classList.add('active'));

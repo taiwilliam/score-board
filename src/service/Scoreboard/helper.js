@@ -111,7 +111,7 @@ export const purePush = (array, value) => {
  * @returns {number} 當前的發球方 (1 或 2)。
  */
 export const calculateCurrentServer = (starting_server, score_1, score_2, max_score) => {
-    const totalScore = score_1 + score_2 - 1 // 總得分（從 0 開始） 0,[1,2],[3,4],[5,6]...
+    const totalScore = score_1 + score_2 // 總得分（從 0 開始） 0,[1,2],[3,4],[5,6]...
     const opponent_id = starting_server === 1 ? 2 : 1
 
     // deuce 規則（當雙方達到最大得分 - 1 時，每人輪流發 1 球）
