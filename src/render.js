@@ -253,8 +253,8 @@ const renderMatchStatsContent = (match_data, game_data) => {
 
     const new_game_data = formatGameData(game_data)
 
-    new_game_data.forEach((game_data, index) => {
-        renderMatchStatsTr(game_data, GAME_DATA_HIDE_KEY, index + 1, false)
+    new_game_data.forEach(game_data => {
+        renderMatchStatsTr(game_data, GAME_DATA_HIDE_KEY, game_data.total_score.game, false)
     })
 
     // 渲染Match Stats Match Content
